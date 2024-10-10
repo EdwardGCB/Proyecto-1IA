@@ -1,8 +1,8 @@
 <?php
 session_start();
+require ("../logica/Persona.php");
+require ("../logica/Proveedor.php");
 $error = false;
-require ("./logica/Persona.php");
-require ("./logica/Proveedor.php");
 
 if(isset($_POST["autenticar"])){
   $correo = $_POST["correo"];
