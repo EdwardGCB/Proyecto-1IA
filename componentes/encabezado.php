@@ -7,3 +7,34 @@
     <script
         src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
     </script>
+    <style>
+        .material-symbols-rounded {
+            font-variation-settings:
+            'FILL' 1,
+            'wght' 400,
+            'GRAD' 0,
+            'opsz' 24
+        }
+        .centered-form {
+            width: 50%;
+            margin: 0 auto;
+        }
+        .full-page {
+            background-color: #8A0808;
+            padding: 30px;
+            width: 100vw;
+        }
+
+        .nav-item a {
+            color: white;
+        }
+
+        .footer {
+            background-color: #8A0808;
+            padding: 20px;
+            color: white;
+            text-align: center;
+            font-size: 14px;
+            margin-top: auto;
+            
+        }
