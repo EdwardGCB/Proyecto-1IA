@@ -217,9 +217,5 @@ include("componentes/encabezado.php");
         </div>
     </div>
 </body>
-<footer class="footer">
-    <div class="container">
-        <p>Todos los derechos reservados &copy; 2023</p>
-    </div>
-</footer>
+    <?php include("componentes/footer.php")?>
 </html>

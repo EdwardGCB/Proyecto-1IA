@@ -50,7 +50,7 @@ class Cliente extends Persona{
       return true;
     }else{
       $conexion -> cerrarConexion();
-      return true;
+      return false;
     }
   }
 

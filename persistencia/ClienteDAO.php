@@ -21,7 +21,7 @@ class ClienteDAO{
   public function autenticar(){
     return "select idCliente
             from Cliente
-            where correo = '" . $this -> correo . "' and password = '" . $this -> clave . "'";
+            where email = '" . $this -> correo . "' and password = '" . $this -> clave . "'";
   }
 
   public function autenticarCorreo(){

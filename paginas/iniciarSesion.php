@@ -2,17 +2,25 @@
 session_start();
 require ("../logica/Persona.php");
 require ("../logica/Proveedor.php");
+require ("../logica/Cliente.php");
 $error = false;
 
 if(isset($_POST["autenticar"])){
-  $correo = $_POST["correo"];
-  $clave = md5($_POST["clave"]);
-    $proveedor = new Proveedor(null, null, null, $correo, $clave);
+  $correo = $_POST["email"];
+  $clave = md5($_POST["password"]);
+    $proveedor = new Proveedor(null, null, null, $correo, null,$clave);
     if($proveedor -> autenticar()){
         $_SESSION["id"] = $proveedor -> getIdPersona();
-        header("Location: index.php");     
+        header("Location: sesionProveedor.php");     
     }else{
-        $error = true;
+			$cliente = new Cliente(null,null,null, $correo, null, $clave);
+			if($cliente -> autenticar()){
+				
+				$_SESSION["id"] = $cliente -> getIdPersona();
+        header("Location: ../index.php");
+			}else{
+				$error = true;
+			}
     }    
 }
 include("../componentes/encabezado.php");
@@ -62,7 +70,7 @@ include("../componentes/encabezado.php");
 								</div>
 
 								<div class="d-grid gap-2">
-									<button type="submit" class="btn btn-primary max-width">
+									<button type="submit" name="autenticar" class="btn btn-primary max-width">
 										Iniciar Sesion
 									</button>
 								</div>
@@ -74,9 +82,7 @@ include("../componentes/encabezado.php");
 							</div>
 						</div>
 					</div>
-					<div class="text-center mt-5 text-muted">
-						Copyright &copy; 2024 &mdash; Ticketera.co 
-					</div>
+					<?php include("../componentes/footer.php") ?>
 				</div>
 			</div>
 		</div>

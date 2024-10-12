@@ -15,16 +15,12 @@ if(isset($_POST["insertar"])){
     $telefono = $_POST["telefono"];
     $clave = md5($_POST["clave0"]);
     $clave2 = md5($_POST["clave1"]);
-    echo "Telefono: ".$telefono;
-    echo "Clave1: ".$clave;
-    echo "Clave2: ".$clave2;
     $cliente = new Cliente(0, $nombre, $apellido,$correo, $telefono, $clave, $cc_nit);
-    if( hash_equals($clave,$clave2 )){
+    if(hash_equals($clave,$clave2 )){
       if($cliente -> autenticarCorreo()){
         $cliente -> insertar();
         $_SESSION["id"] = $cliente -> getIdPersona();
-        echo $_SESSION["id"];
-        //header("Location: index.php");
+        header("Location: index.php");
       }else{
         $error = "El correo digitado ya existe";
       }

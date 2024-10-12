@@ -22,7 +22,7 @@ class ProveedorDAO {
   public function autenticar(){
     return "select idProveedor
             from Proveedor 
-            where correo = '" . $this -> correo . "' and password = '" . $this -> clave . "'";
+            where email = '" . $this -> correo . "' and password = '" . $this -> clave . "'";
   }
 
   public function consultarPorId(){
