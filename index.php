@@ -1,6 +1,7 @@
 <?php
 //require ("logica/Producto.php");
 require("logica/Categoria.php");
+require("logica/Ciudad.php");
 // require ("logica/Marca.php");
 include("componentes/encabezado.php");
 ?>
@@ -129,55 +130,57 @@ include("componentes/encabezado.php");
     </div>
     <!-- Cities -->
     <div class="container">
-        <div class="row mb-3">
-            <div class="col">
-                <h4>Ciudades</h4>
-                <div class="container">
-                    <div id="carouselExample" class="carousel slide" data-bs-ride="carousel">
-                        <div class="carousel-inner">
-                            <!-- First slide -->
-                            <div class="carousel-item active">
-                                <div class="container">
-                                    <div class="row">
-                                        <div class="col-3">
-                                            <a href="#"><div class="p-3 border bg-light square">Element 1</div></a>
-                                        </div>
-                                        <div class="col-3">
-                                            <a href="#"><div class="p-3 border bg-light square">Element 2</div></a>
-                                        </div>
-                                        <div class="col-3">
-                                            <a href="#"><div class="p-3 border bg-light square">Element 3</div></a>
-                                        </div>
-                                        <div class="col-3">
-                                            <a href="#"><div class="p-3 border bg-light square">Element 4</div></a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- Second slide -->
-                            <div class="carousel-item">
-                                <div class="container">
-                                    <div class="row">
-                                        <div class="col-3">
-                                            <a href="#"><div class="p-3 border bg-light square">Element 5</div></a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
-                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                            <span class="visually-hidden">Previous</span>
-                        </button>
-                        <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
-                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                            <span class="visually-hidden">Next</span>
-                        </button>
+    <div class="row mb-3">
+        <div class="col">
+            <h4>Ciudades</h4>
+            <div class="container">
+                <div id="carouselExample" class="carousel slide" data-bs-ride="carousel">
+                    <div class="carousel-inner">
+                        <?php
+                        $ciudad = new Ciudad();
+                        $ciudades = $ciudad->consultarTodos();
+                        $totalCiudades = count($ciudades);
+                        $ciudadesPorSlide = 4;
+                        $slideIndex = 0;
+
+                        // Loop through the cities and divide them into slides of 4
+                        foreach ($ciudades as $index => $ciudadActual) {
+                            // Open a new slide if needed
+                            if ($index % $ciudadesPorSlide == 0) {
+                                $activeClass = ($slideIndex == 0) ? 'active' : '';
+                                echo "<div class='carousel-item $activeClass'>";
+                                echo "<div class='container'><div class='row'>";
+                                $slideIndex++;
+                            }
+
+                            // Output the city as a square element
+                            echo "<div class='col-3'>";
+                            echo "<a href='#'><div class='p-3 border bg-light square'>";
+                            echo $ciudadActual->getNombre();
+                            echo "</div></a>";
+                            echo "</div>";
+
+                            // Close the slide if we've added 4 cities
+                            if (($index + 1) % $ciudadesPorSlide == 0 || ($index + 1) == $totalCiudades) {
+                                echo "</div></div></div>";
+                            }
+                        }
+                        ?>
                     </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
                 </div>
             </div>
         </div>
     </div>
+</div>
+
     <!-- Categories -->
     <div class="container">
         <div class="row mb-3">
