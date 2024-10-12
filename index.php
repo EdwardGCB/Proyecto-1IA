@@ -181,44 +181,37 @@ include("componentes/encabezado.php");
     </div>
 </div>
 
-    <!-- Categories -->
-    <div class="container">
-        <div class="row mb-3">
-            <div class="col">
-                <h4>Categorias</h4>
-                <div class="container">
-                    <div class="row">
-                        <div class="col-3">
-                            <a href="#"><div class="p-3 border bg-light square">Element 1</div></a>
-                        </div>
-                        <div class="col-3">
-                            <a href="#"><div class="p-3 border bg-light square">Element 2</div></a>
-                        </div>
-                        <div class="col-3">
-                            <a href="#"><div class="p-3 border bg-light square">Element 3</div></a>
-                        </div>
-                        <div class="col-3">
-                            <a href="#"><div class="p-3 border bg-light square">Element 4</div></a>
-                        </div>
-                    </div> 
-                    <div class="row">
-                        <div class="col-3">
-                            <a href="#"><div class="p-3 border bg-light square">Element 1</div></a>
-                        </div>
-                        <div class="col-3">
-                            <a href="#"><div class="p-3 border bg-light square">Element 2</div></a>
-                        </div>
-                        <div class="col-3">
-                            <a href="#"><div class="p-3 border bg-light square">Element 3</div></a>
-                        </div>
-                        <div class="col-3">
-                            <a href="#"><div class="p-3 border bg-light square">Element 4</div></a>
-                        </div>
-                    </div>       
-                </div>
+<div class="container">
+    <div class="row mb-3">
+        <div class="col">
+            <h4>Categorías</h4>
+            <div class="container">
+                <div class="row">
+                    <?php
+                    $categoria = new Categoria();
+                    $categorias = $categoria->consultarCategorias(); // Obtén todas las categorías
+                    $totalCategorias = count($categorias);
+                    $categoriasPorColumna = 4; // Cuatro categorías por fila
+                    // Loop through the categories and output them in columns
+                    foreach ($categorias as $index => $categoriaActual) {
+                        echo "<div class='col-3'>"; // Cambia a col-3 para cuatro categorías por fila
+                        echo "<a href='#'><div class='p-3 border bg-light square'>";
+                        echo $categoriaActual->getNombre(); // Muestra el nombre de la categoría
+                        echo "</div></a>";
+                        echo "</div>";
+
+                        // Cierra la fila después de cuatro categorías
+                        if (($index + 1) % $categoriasPorColumna == 0) {
+                            echo "</div><div class='row'>"; // Cierra la fila actual y abre una nueva
+                        }
+                    }
+                    ?>
+                </div>       
             </div>
         </div>
     </div>
+</div>
+
 </body>
     <?php include("componentes/footer.php")?>
 </html>
