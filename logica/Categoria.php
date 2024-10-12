@@ -1,6 +1,6 @@
 <?php
-require_once ("./persistencia/Conexion.php");
-require ("./persistencia/CategoriaDAO.php");
+require_once (dirname(__DIR__) . '/persistencia/Conexion.php');
+require_once (dirname(__DIR__) . '/persistencia/CategoriaDAO.php');
 
 class Categoria{
     private $idCategoria;
@@ -36,6 +36,15 @@ class Categoria{
         $conexion -> cerrarConexion();
         return $categorias;        
     }
+    public function consultaCategoria(){
+        $conexion = new Conexion();
+        $conexion -> abrirConexion();
+        $ciudadDAO = new CiudadDAO($this -> idCategoria);
+        $conexion -> ejecutarConsulta($ciudadDAO -> consultaIndividual());
+        $registro = $conexion -> siguienteRegistro();
+        $this -> nombre = $registro[0];
+        $conexion -> cerrarConexion();
+      }
 }
 
 ?>

@@ -14,6 +14,11 @@ class CategoriaDAO{
                 order by nombre asc";
     } 
 
+    public function consultaIndividual(){
+        return "select nombre 
+                from Ciudad
+                where idMarca = '" . $this -> idCategoria . "'";
+      }
 }
 
 ?>
