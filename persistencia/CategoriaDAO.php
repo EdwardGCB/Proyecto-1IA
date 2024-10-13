@@ -14,11 +14,32 @@ class CategoriaDAO{
                 order by nombre asc";
     } 
 
-    public function consultaIndividual(){
-        return "select nombre 
-                from Ciudad
-                where idMarca = '" . $this -> idCategoria . "'";
-      }
+    public function consultaIndividual($idCategoria) {
+        return "SELECT 
+            e.idEvento, 
+            e.sitio, 
+            e.flayer, 
+            e.logo, 
+            e.edadMinima, 
+            e.nombre AS artista, 
+            e.fechaEvento, 
+            e.horaEvento, 
+            p.usuario AS proveedor, -- Cambié el alias para que coincida con el atributo
+            c.nombre AS ciudad, 
+            ca.nombre AS categoria -- Asegúrate de incluir la categoría
+        FROM 
+            evento e 
+        INNER JOIN 
+            proveedor p ON e.Proveedor = p.idProveedor 
+        INNER JOIN 
+            ciudad c ON e.ciudad_idciudad = c.idciudad 
+        INNER JOIN 
+            categoria ca ON e.categoria_idCategoria = ca.idCategoria
+
+        WHERE ca.idCategoria = $idCategoria;
+        ";
+    }
+    
 }
 
 ?>
