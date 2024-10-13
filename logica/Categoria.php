@@ -1,5 +1,5 @@
 <?php
-require_once('Evento.php');
+
 require_once (dirname(__DIR__) . '/persistencia/Conexion.php');
 require_once (dirname(__DIR__) . '/persistencia/CategoriaDAO.php');
 
@@ -40,14 +40,31 @@ class Categoria {
     }
 
     public function consultarPorCategoria($idCategoria) {
-        $eventos = array(); // Inicializa correctamente la variable $eventos
+        $eventos = array();    
         $conexion = new Conexion();
         $conexion->abrirConexion();
         $categoriaDAO = new CategoriaDAO();
+    
+        // Ejecutar consulta para obtener eventos por categoría
         $conexion->ejecutarConsulta($categoriaDAO->consultaIndividual($idCategoria));
-        
+    
         while ($registro = $conexion->siguienteRegistro()) {
-            $evento = new Evento($registro[0],$registro[1],$registro[2], $registro[3], $registro[4], $registro[5], $registro[6], $registro[7]);
+    
+
+    
+            // Crear el objeto Evento
+            $evento = new Evento(
+                $registro[0],  // idEvento
+                $registro[1],  // sitio
+                $registro[2],  // flayer
+                $registro[3],  // logo
+                $registro[4],  // edadMinima
+                $registro[5],  // nombre del evento
+                $registro[6],  // fechaEvento
+                $registro[7],  // horaEvento
+                $registro[8],  
+                $registro[9],
+            );
             array_push($eventos, $evento);
         }
     
