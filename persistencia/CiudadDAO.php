@@ -17,7 +17,7 @@ class CiudadDAO{
   public function consultaIndividual(){
     return "select nombre 
             from Ciudad
-            where idMarca = '" . $this -> idCiudad . "'";
+            where idCiudad  = '" . $this -> idCiudad . "'";
   }
 }
 ?>
