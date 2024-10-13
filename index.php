@@ -192,11 +192,11 @@ include("componentes/encabezado.php");
                     $categorias = $categoria->consultarCategorias(); // Obtén todas las categorías
                     $totalCategorias = count($categorias);
                     $categoriasPorColumna = 4; // Cuatro categorías por fila
-                    // Loop through the categories and output them in columns
+
                     foreach ($categorias as $index => $categoriaActual) {
-                        echo "<div class='col-3'>"; // Cambia a col-3 para cuatro categorías por fila
-                        echo "<a href='#'><div class='p-3 border bg-light square'>";
-                        echo $categoriaActual->getNombre(); // Muestra el nombre de la categoría
+                        echo "<div class='col-3'>"; 
+                        echo "<a href='paginas/CategoriaEvento.php?idCategoria=" . $categoriaActual->getIdCategoria() . "'><div class='p-3 border bg-light square'>";
+                        echo htmlspecialchars($categoriaActual->getNombre()); // Muestra el nombre de la categoría
                         echo "</div></a>";
                         echo "</div>";
 
@@ -211,6 +211,7 @@ include("componentes/encabezado.php");
         </div>
     </div>
 </div>
+
 
 </body>
     <?php include("componentes/footer.php")?>
