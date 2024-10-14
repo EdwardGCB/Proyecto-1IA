@@ -26,5 +26,38 @@ class EventoDAO{
     $this->categoria = $categoria;
   }
 
+  public function consultarPorProveedor(){
+    return "
+    select idEvento, nombre, fechaEvento, horaEvento, ciudad_idCiudad, Categoria_idCategoria
+    from Evento
+    where Proveedor_idProveedor = '" .$this->proveedor->getIdPersona(). "'";
+  }
+
+  public function consultarPorBusqueda($value){
+    return "
+    select idEvento, nombre, fechaEvento, horaEvento, ciudad_idCiudad, Categoria_idCategoria
+    from Evento
+    where Proveedor_idProveedor = '" .$this->proveedor->getIdPersona(). "' and nombre= '". $value ."'";
+  }
+
+  public function agregar(){
+    return "
+    insert into Evento
+    values ('". $this->idEvento ."', '". $this->sitio. "', '".$this->flayer."', '". $this->logo."', '". $this->edadMinima."', '".$this->nombre."', '". $this->fechaEvento."', '". $this->horaEvento."', '".$this->proveedor->getIdPersona()."', '". $this->ciudad->getIdCiudad()."', '".$this->categoria->getIdCategoria()."')";
+  }
+
+  public function consultaIndividual(){
+    return "
+    select nombre
+    from Evento
+    where idEvento = '". $this->idEvento."'";
+  }
+
+  public function numeroEventosProveedor(){
+    return "select idEvento
+    from Evento
+    where Proveedor_idProveedor = '".$this->proveedor->getIdPersona()."'";
+  }
+
 }
 ?>

@@ -14,10 +14,10 @@ class CiudadDAO{
             order by nombre asc";
   }
 
-  public function consultaIndividual(){
+  public function consultaPorId(){
     return "select nombre 
             from Ciudad
-            where idMarca = '" . $this -> idCiudad . "'";
+            where idciudad = '" . $this -> idCiudad . "'";
   }
 }
 ?>

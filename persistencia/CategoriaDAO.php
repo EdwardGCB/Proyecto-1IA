@@ -14,6 +14,12 @@ class CategoriaDAO{
                 order by nombre asc";
     } 
 
+    public function consultarPorId(){
+        return "select nombre 
+                from Categoria
+                where idCategoria = '" . $this -> idCategoria . "'";
+      }
+
 }
 
 ?>

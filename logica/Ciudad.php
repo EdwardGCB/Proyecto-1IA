@@ -1,7 +1,6 @@
 <?php
 require_once ("../persistencia/Conexion.php");
 require ("../persistencia/CiudadDAO.php");
-
 class Ciudad{ 
   private $idCiudad; 
   private $nombre;
@@ -41,11 +40,11 @@ class Ciudad{
     return $ciudades;
   }
 
-  public function consultaIndividual(){
+  public function consultarPorId(){
     $conexion = new Conexion();
     $conexion -> abrirConexion();
     $ciudadDAO = new CiudadDAO($this -> idCiudad);
-    $conexion -> ejecutarConsulta($ciudadDAO -> consultaIndividual());
+    $conexion -> ejecutarConsulta($ciudadDAO -> consultaPorId());
     $registro = $conexion -> siguienteRegistro();
     $this -> nombre = $registro[0];
     $conexion -> cerrarConexion();

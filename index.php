@@ -1,6 +1,6 @@
 <?php
 //require ("logica/Producto.php");
-require("logica/Categoria.php");
+// require_once("logica/Categoria.php");
 // require ("logica/Marca.php");
 include("componentes/encabezado.php");
 ?>
