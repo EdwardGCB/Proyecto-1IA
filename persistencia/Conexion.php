@@ -14,13 +14,18 @@ class Conexion {
     }
 
     public function ejecutarConsulta($sentenciaSQL) {
-        // Ejecutar la consulta y manejar posibles errores
-        $this->resultado = $this->mysqlConexion->query($sentenciaSQL);
-        
-        if (!$this->resultado) {
-            die("Error en la consulta: " . $this->mysqlConexion->error . " | Consulta: " . $sentenciaSQL);
+        try {
+            $this->resultado = $this->mysqlConexion->query($sentenciaSQL);
+            
+            if ($this->resultado === false) {
+                throw new Exception("Error en la consulta: " . $this->mysqlConexion->error . " | Consulta: " . $sentenciaSQL);
+            }
+            return $this->resultado;
+        } catch (PDOException $e) {
+            throw new Exception("Error al ejecutar la consulta: " . $e->getMessage());
         }
     }
+    
 
     public function siguienteRegistro() {
         // Devuelve el siguiente registro, o null si no hay más registros
