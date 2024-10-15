@@ -10,7 +10,6 @@ require_once(dirname(__DIR__) . '/persistencia/EventoZonaDAO.php');
 ?>
 
 <style>
-    <style>
     /* Fondo para la tabla */
     .table-reservas {
         background-color: #f8f9fa;
@@ -49,7 +48,6 @@ require_once(dirname(__DIR__) . '/persistencia/EventoZonaDAO.php');
     }
 </style>
 
-</style>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
