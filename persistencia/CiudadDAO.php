@@ -14,7 +14,7 @@ class CiudadDAO{
             order by nombre asc";
   }
 
-  public function consultaIndividual(){
+  public function consultarPorId(){
     return "select nombre 
             from Ciudad
             where idCiudad  = '" . $this -> idCiudad . "'";

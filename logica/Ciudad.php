@@ -44,7 +44,7 @@ class Ciudad{
     $conexion = new Conexion();
     $conexion -> abrirConexion();
     $ciudadDAO = new CiudadDAO($this -> idCiudad);
-    $conexion -> ejecutarConsulta($ciudadDAO -> consultaPorId());
+    $conexion -> ejecutarConsulta($ciudadDAO -> consultarPorId());
     $registro = $conexion -> siguienteRegistro();
     $this -> nombre = $registro[0];
     $conexion -> cerrarConexion();

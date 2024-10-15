@@ -13,7 +13,7 @@ require "../logica/Ticket.php";
 require "../logica/Ciudad.php";
 require "../logica/Categoria.php";
 $proveedor = new Proveedor($id);
-$proveedor -> consultar();
+$proveedor -> consultarPorId();
 $evento = new Evento(null,null,null,null,null,null,null,null,$proveedor);
 $cantidadEventos = $evento -> numeroEventosProveedor();
 $hoy = date('y-m-d');

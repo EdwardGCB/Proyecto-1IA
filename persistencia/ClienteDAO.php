@@ -31,7 +31,7 @@ class ClienteDAO{
   }
 
   public function consultarPorId(){
-    return "select cc, nombre, apellidos, telefono
+    return "select cc, nombre, apellidos, telefono, email, password
             from Cliente
             where idCliente = '". $this -> idPersona ."'";
   }

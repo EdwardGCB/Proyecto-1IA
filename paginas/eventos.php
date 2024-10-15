@@ -10,7 +10,7 @@ require ("../logica/Categoria.php");
 require ("../logica/Evento.php");
 $id = $_SESSION["id"];
 $proveedor = new Proveedor($id);
-$proveedor -> consultar();
+$proveedor -> consultarPorId();
 $evento = new Evento(null, null, null, null, null, null, null, null, $proveedor);
 $cantidadDatos = $evento -> numeroEventosProveedor();
 $cantidadDatosMostrar = 6;

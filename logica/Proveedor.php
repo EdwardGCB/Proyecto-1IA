@@ -30,7 +30,7 @@ class Proveedor extends Persona{
     }
   }
 
-  public function consultar(){
+  public function consultarPorId(){
     $conexion = new Conexion();
     $conexion -> abrirConexion();
     $proveedorDAO = new ProveedorDAO($this->idPersona);

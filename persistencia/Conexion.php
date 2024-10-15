@@ -5,7 +5,7 @@ class Conexion {
     private $resultado;
 
     public function abrirConexion() {
-        $this->mysqlConexion = new mysqli("localhost", "root", "", "mydb");
+        $this->mysqlConexion = new mysqli("localhost", "root", "", "ticketera");
 
         // Verificar si hay errores de conexión
         if ($this->mysqlConexion->connect_error) {

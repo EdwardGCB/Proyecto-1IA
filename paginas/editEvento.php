@@ -13,7 +13,7 @@ require ("../logica/Zona.php");
 require ("../logica/Asiento.php");
 $id = $_SESSION["id"];
 $proveedor = new Proveedor($id);
-$proveedor -> consultar();
+$proveedor -> consultarPorId();
 $zona = new Zona();
 if(!isset($_GET["id"]) || $_GET["id"] < 1){
   header("Location: sesionProveedor.php"); 
@@ -131,7 +131,7 @@ height: 100%;
                     <option selected>Categoria</option>
                     <?php
                       $categoria = new Categoria();
-                      $categorias = $categoria->consultarTodos();
+                      $categorias = $categoria->consultarCategorias();
                       foreach ($categorias as $categoriaActual) {
                         $selected = ($categoriaActual->getIdCategoria() == $evento->getCategoria()->getIdCategoria()) ? 'selected' : '';
                         echo '<option value="' . $categoriaActual->getIdCategoria() . '" ' . $selected . '>' . $categoriaActual->getNombre() . '</option>';

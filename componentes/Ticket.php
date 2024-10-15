@@ -1,4 +1,3 @@
-<style>
 .material-symbols-rounded {
     font-variation-settings:
         'FILL' 1,
@@ -149,4 +148,3 @@ body {
         font-size: 75%;
     }
 }
-</style>

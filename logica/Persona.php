@@ -1,7 +1,7 @@
 <?php
-require_once(dirname(__DIR__) . '/persistencia/Conexion.php');
-require_once(dirname(__DIR__) . '/persistencia/ProveedorDAO.php');
-require_once(dirname(__DIR__) . '/persistencia/ClienteDAO.php');
+require_once('../persistencia/Conexion.php');
+require('../persistencia/ProveedorDAO.php');
+require('../persistencia/ClienteDAO.php');
 
 
 class Persona{

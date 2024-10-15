@@ -55,7 +55,7 @@
                 <option selected>Categoria</option>
                 <?php
                     $categoria = new Categoria();
-                    $categorias = $categoria->consultarTodos();
+                    $categorias = $categoria->consultarCategorias();
                     foreach ($categorias as $categoriaActual) {
                         echo '<option value="' . $categoriaActual->getIdCategoria() . '">' . $categoriaActual->getNombre() . '</option>';
                     }
