@@ -13,7 +13,7 @@ $proveedor = new Proveedor($id);
 $proveedor -> consultar();
 $evento = new Evento(null, null, null, null, null, null, null, null, $proveedor);
 $cantidadDatos = $evento -> numeroEventosProveedor();
-$cantidadDatosMostrar = 10;
+$cantidadDatosMostrar = 6;
 $paginas = ceil($cantidadDatos / $cantidadDatosMostrar);
 if(!isset($_GET["pagina"])){
   header("Location: eventos.php?pagina=1");

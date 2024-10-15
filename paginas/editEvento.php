@@ -14,6 +14,8 @@ require_once ("../logica/Categoria.php");
 require ("../logica/Asiento.php");
 $id = $_SESSION["id"];
 $proveedor = new Proveedor($id);
+$asiento = new Asiento();
+$asientos = $asiento -> crearAsientos();
 $proveedor -> consultar();
 if(!isset($_GET["id"]) || $_GET["id"] < 1){
   header("Location: sesionProveedor.php"); 
