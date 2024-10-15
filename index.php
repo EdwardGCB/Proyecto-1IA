@@ -1,7 +1,6 @@
 <?php
-//require ("logica/Producto.php");
 require("logica/Categoria.php");
-// require ("logica/Marca.php");
+require("logica/Ciudad.php");
 include("componentes/encabezado.php");
 ?>
         .p-3 {
@@ -133,14 +132,14 @@ include("componentes/encabezado.php");
         <div class="col">
             <h4>Ciudades</h4>
             <div class="container">
-                <div id="carouselExample" class="carousel slide" data-bs-ride="carousel">
+                <div id="carouselCiudades" class="carousel slide" data-bs-ride="carousel">
                     <div class="carousel-inner">
                         <?php
                         $ciudad = new Ciudad();
                         $ciudades = $ciudad->consultarTodos();
                         $totalCiudades = count($ciudades);
                         $ciudadesPorSlide = 4;
-                        $slideIndex = 0;
+                        $slideIndex = 0;    
 
                         // Loop through the cities and divide them into slides of 4
                         foreach ($ciudades as $index => $ciudadActual) {
@@ -154,7 +153,7 @@ include("componentes/encabezado.php");
 
                             // Output the city as a square element
                             echo "<div class='col-3'>";
-                            echo "<a href='#'><div class='p-3 border bg-light square'>";
+                            echo "<a href='paginas/ciudadEvento.php?idCiudad=".$ciudadActual->getIdCiudad()."'><div class='p-3 border bg-light square'>";
                             echo $ciudadActual->getNombre();
                             echo "</div></a>";
                             echo "</div>";

@@ -1,15 +1,14 @@
 <?php
-require('../logica/Evento.php');
-require('../logica/Persona.php');
-require('../logica/Proveedor.php');
-require('../logica/Ciudad.php');
-require("../logica/Categoria.php");
+  require('../logica/Evento.php');
+  require('../logica/Persona.php');
+  require('../logica/Proveedor.php');
+  require('../logica/Ciudad.php');
+  require("../logica/Categoria.php");
 
-include('../componentes/encabezado.php');
-include('../componentes/Ticket.php');
+  include('../componentes/encabezado.php');
+  include('../componentes/Ticket.php');
 ?>
 </style>
-
 <body>
   <?php include('../componentes/navcliente.php');?>
   <br>
@@ -18,18 +17,13 @@ include('../componentes/Ticket.php');
     <div class="row">
       <?php
             // Verificar si se ha pasado un idCategoria como parámetro en la URL
-            if (isset($_GET['idCategoria'])) {
-                $idCategoria = $_GET['idCategoria'];
-
+            if (isset($_GET['idCiudad'])) {
+                $idCiudad= $_GET['idCiudad'];
                 // Instanciar la clase Categoria y llamar al método para consultar eventos por categoría
-                $categoria = new Categoria($idCategoria);
-                $evento = new Evento(null,null,null,null,null,null,null,null,null,null,$categoria);
-                $eventos = $evento->consultarPorCategoria();
-
+                $ciudad = new Ciudad($idCiudad);
+                $evento = new Evento(null,null,null,null,null,null,null,null,null,$ciudad);
+                $eventos = $evento->consultarPorCiudad();
                 // Echo para ver los datos
-
-
-
                 if (!empty($eventos)) {
                     foreach ($eventos as $eventoActual) {
                         // Asegúrate de que 'fechaEvento' no esté vacío

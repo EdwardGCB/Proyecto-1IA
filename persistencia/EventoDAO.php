@@ -93,5 +93,12 @@ class EventoDAO{
     order by nombre asc";
   }
 
+  public function consultarPorCiudad(){
+    return "
+    select idEvento, sitio, flayer, logo, edadMinima, nombre, fechaEvento, horaEvento, Proveedor_idProveedor, Categoria_idCategoria
+    from Evento
+    where ciudad_idCiudad = '". $this->ciudad->getIdCiudad()."'
+    order by nombre asc";
+  }
 }
 ?>

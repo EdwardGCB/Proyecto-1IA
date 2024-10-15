@@ -4,8 +4,6 @@ require('../logica/EventoZona.php');
 require('../logica/Zona.php');
 include('../componentes/encabezado.php');
 ?>
-
-<style>
 /* Fondo para la tabla */
 .table-reservas {
   background-color: #f8f9fa;
@@ -42,16 +40,8 @@ include('../componentes/encabezado.php');
 #reservaAsientosTable tbody tr:hover {
   background-color: #e9ecef;
 }
-</style>
-
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Evento</title>
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-  <style>
-  /* Estilos generales */
-  body {
+/* Estilos generales */
+body {
     font-family: Arial, sans-serif;
   }
 
@@ -148,7 +138,7 @@ include('../componentes/encabezado.php');
     text-align: center;
     padding: 20px 0;
   }
-  </style>
+</style>
 </head>
 
 <?php
@@ -241,7 +231,8 @@ if (isset($_GET['idEvento'])) {
     </div>
 
   </div>
+  
+  <?php require ('../componentes/footer.php');?>
 
 </body>
-
-<?php require ('../componentes/footer.php');?>
+</html>

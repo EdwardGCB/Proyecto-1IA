@@ -1,4 +1,6 @@
 <?php
+require_once('../persistencia/Conexion.php');
+require('../persistencia/EventoDAO.php');
 class Evento{
   private $idEvento;
   private $sitio;
@@ -244,7 +246,7 @@ class Evento{
     $ciudades = array();
     $conexion = new Conexion();
     $conexion->abrirConexion();
-    $this->categoria->consultaPorId();
+    $this->categoria->consultarPorId();
     $eventoDAO = new EventoDAO(null, null, null, null, null, null, null, null, null,null,$this->categoria);
     $conexion -> ejecutarConsulta($eventoDAO->consultarPorCategoria());
     while ($registro = $conexion->siguienteRegistro()) {
@@ -259,6 +261,32 @@ class Evento{
       $proveedor = new Proveedor($registro[8]);
       $proveedor -> consultarPorId();
       $evento = new Evento($registro[0],$registro[1],$registro[2],$registro[3],$registro[4],$registro[5],$registro[6],$registro[7],$proveedor, $ciudad, $this->categoria);
+      array_push($eventos, $evento);
+    }
+    $conexion->cerrarConexion();
+    return $eventos;
+  }
+
+  public function consultarPorCiudad(){
+    $eventos = array();
+    $categorias = array();
+    $conexion = new Conexion();
+    $conexion->abrirConexion();
+    $this->ciudad->consultarPorId();
+    $eventoDAO = new EventoDAO(null, null, null, null, null, null, null, null, null,$this->categoria);
+    $conexion -> ejecutarConsulta($eventoDAO->consultarPorCiudad());
+    while ($registro = $conexion->siguienteRegistro()) {
+      $categoria=null;
+      if(array_key_exists($registro[9],$categorias)){
+        $categoria = $categorias[$registro[9]];
+      } else{
+        $categoria = new Categoria($registro[9]);
+        $categoria -> consultarPorId();
+        $categorias[$registro[9]] = $categoria;
+      }
+      $proveedor = new Proveedor($registro[8]);
+      $proveedor -> consultarPorId();
+      $evento = new Evento($registro[0],$registro[1],$registro[2],$registro[3],$registro[4],$registro[5],$registro[6],$registro[7],$proveedor, $$this->ciudad, $categoria);
       array_push($eventos, $evento);
     }
     $conexion->cerrarConexion();
