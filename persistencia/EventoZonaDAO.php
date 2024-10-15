@@ -21,6 +21,8 @@ class EventoZonaDAO{
     ";
   }
 
+  
+
   public function insertar(){
     return "INSERT INTO EventoZona (valor, afoto, Evento_idEvento, Zona_idZona)
     VALUES ('".$this->valor."', '".$this->aforo."', '".$this->evento->getIdEvento()."', '".$this->zona->getIdZona()."')";

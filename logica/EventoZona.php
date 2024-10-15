@@ -38,12 +38,11 @@ class EventoZona{
   public function setZona($zona) {
     $this->zona = $zona;
   }
-
-  public function __construct($valor=0, $aforo=0, $evento=null, $zona=null){
-    $this -> valor = $valor;
-    $this -> aforo = $aforo;
-    $this -> evento = $evento;
-    $this -> zona = $zona;
+  public function __construct($valor=0, $aforo=0, $evento=null, $zona=null) {
+    $this->valor = $valor;
+    $this->aforo = $aforo;
+    $this->evento = $evento;
+    $this->zona = $zona;
   }
 
   public function consultarPorEvento($limite=null) {
@@ -68,7 +67,7 @@ class EventoZona{
     $conexion->cerrarConexion();
     return $eventosZona;
   }
-
+  
   public function cantidadReservas(){
     $zonaReservadas = array();
     $conexion = new Conexion();

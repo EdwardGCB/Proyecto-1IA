@@ -1,7 +1,4 @@
 <?php
-require_once ("../persistencia/Conexion.php");
-require ("../persistencia/EventoDAO.php");
-
 class Evento{
   private $idEvento;
   private $sitio;
@@ -116,8 +113,7 @@ class Evento{
     $this->ciudad = $ciudad;
     $this->categoria = $categoria;
   }
-
-  public function consultarPorProveedor($value = null, $inicio=0, $datos=0) {
+  public function consultarPorProveedor($value = null, $inicio=null, $datos=null) {
     $eventos = array();
     $ciudades = array();
     $categorias = array();
@@ -146,7 +142,7 @@ class Evento{
         $evento = new Evento($registro[0], null, null, null, null, $registro[1], $registro[2], $registro[3], $this->proveedor, $ciudad, $categoria);
         array_push($eventos, $evento);
     }
-    
+
     $conexion->cerrarConexion();
     return $eventos;
 }
@@ -175,6 +171,7 @@ class Evento{
       $conexion -> cerrarConexion();
       return false;
     }else{
+      /*seteo los datos del evento */
       $conexion -> cerrarConexion();
       return true;
     }
@@ -240,6 +237,32 @@ class Evento{
     $evento = new Evento($resultado[0],$resultado[1],null,null,$resultado[2],$resultado[3],$resultado[4],$resultado[5],$this->proveedor,$ciudad, $categoria);
     $conexion -> cerrarConexion();
     return $evento;
+  }
+
+  public function consultarPorCategoria(){
+    $eventos = array();
+    $ciudades = array();
+    $conexion = new Conexion();
+    $conexion->abrirConexion();
+    $this->categoria->consultaPorId();
+    $eventoDAO = new EventoDAO(null, null, null, null, null, null, null, null, null,null,$this->categoria);
+    $conexion -> ejecutarConsulta($eventoDAO->consultarPorCategoria());
+    while ($registro = $conexion->siguienteRegistro()) {
+      $ciudad=null;
+      if(array_key_exists($registro[9],$ciudades)){
+        $ciudad = $ciudades[$registro[9]];
+      } else{
+        $ciudad = new Ciudad($registro[9]);
+        $ciudad -> consultarPorId();
+        $ciudades[$registro[9]] = $ciudad;
+      }
+      $proveedor = new Proveedor($registro[8]);
+      $proveedor -> consultarPorId();
+      $evento = new Evento($registro[0],$registro[1],$registro[2],$registro[3],$registro[4],$registro[5],$registro[6],$registro[7],$proveedor, $ciudad, $this->categoria);
+      array_push($eventos, $evento);
+    }
+    $conexion->cerrarConexion();
+    return $eventos;
   }
 }
 ?>

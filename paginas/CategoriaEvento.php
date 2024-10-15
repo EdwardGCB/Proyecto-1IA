@@ -1,0 +1,119 @@
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=more_up" />
+
+<body>
+    <?php
+    require_once(dirname(__DIR__) . '/componentes/encabezado.php');
+    require_once(dirname(__DIR__) . '/componentes/navcliente.php');
+    require_once(dirname(__DIR__) . '/componentes/Ticket.php');
+    require_once(dirname(__DIR__) . '/logica/Evento.php');
+    require_once(dirname(__DIR__) . '/logica/Persona.php');
+    require_once(dirname(__DIR__) . '/logica/Proveedor.php');
+    require_once(dirname(__DIR__) . '/logica/Ciudad.php');
+
+    ?>
+
+    <br>
+
+    <section class="container">
+        <h1>Proximos Eventos</h1>
+        <div class="row">
+            <?php
+            require_once("../logica/Categoria.php");
+
+            // Verificar si se ha pasado un idCategoria como parámetro en la URL
+            if (isset($_GET['idCategoria'])) {
+                $idCategoria = $_GET['idCategoria'];
+
+                // Instanciar la clase Categoria y llamar al método para consultar eventos por categoría
+                $categoria = new Categoria();
+                $eventos = $categoria->consultarPorCategoria($idCategoria);
+
+                // Echo para ver los datos
+
+
+
+                if (!empty($eventos)) {
+                    foreach ($eventos as $eventoActual) {
+                        // Asegúrate de que 'fechaEvento' no esté vacío
+                        $fechaEvento = $eventoActual->getFechaEvento();
+                        $fecha = !empty($fechaEvento) ? new DateTime($fechaEvento) : null;
+
+                        // Extraer día, mes y año
+                        $dia = $fecha ? $fecha->format("d") : "";
+                        $mes = $fecha ? $fecha->format("M") : ""; // Mes en formato abreviado
+                        $anio = $fecha ? $fecha->format("Y") : "";
+
+            ?>
+                        <article class="card fl-left">
+                            <section class="date">
+                                <time datetime="<?php echo htmlspecialchars($eventoActual->getFechaEvento()); ?>">
+                                    <?php
+                                    // Obtener el día
+                                    $fechaEvento = $eventoActual->getFechaEvento();
+                                    $fecha = new DateTime($fechaEvento);
+                                    $dia = $fecha->format("d");
+                                    ?>
+                                    <span><?php echo $dia; ?></span> <!-- Día -->
+                                </time>
+                            </section>
+                            <section class="card-cont">
+                                <small><?php echo htmlspecialchars($eventoActual->getNombre()); ?></small>
+                                <h3><?php echo htmlspecialchars($eventoActual->getNombre()); ?> en <?php echo htmlspecialchars($eventoActual->getCiudad()); ?></h3>
+                                <div class="even-date">
+                                    <i class="fa fa-calendar"></i>
+                                    <time>
+                                        <span><?php echo date("l, d F Y", strtotime($eventoActual->getFechaEvento())); ?></span>
+                                        <span><?php echo htmlspecialchars($eventoActual->getHoraEvento()); ?></span>
+                                    </time>
+                                </div>
+                                <div class="even-info">
+                                    <i class="fa fa-map-marker"></i>
+                                    <p>Proveedor: <?php echo htmlspecialchars($eventoActual->getProveedor()); ?></p>
+                                    <p>Ciudad: <?php echo htmlspecialchars($eventoActual->getCiudad()); ?></p>
+                                    <p>
+                                    <span class="material-symbols-outlined moreUpIcon" 
+                                            data-id-evento="<?php 
+                                            echo htmlspecialchars($eventoActual->getIdEvento()); 
+                                            ?>">
+                                        more_up
+                                    </span>
+                                </p>
+
+                                </div>
+
+                            </section>
+                        </article>
+
+            <?php
+                    }
+                } else {
+                    echo "<p>No se encontraron eventos en esta categoría.</p>";
+                }
+            } else {
+                echo "<p>No se ha seleccionado ninguna categoría.</p>";
+            }
+            ?>
+        </div>
+    </section>
+</body>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Selecciona todos los elementos con la clase 'moreUpIcon'
+        const moreUpIcons = document.querySelectorAll(".moreUpIcon");
+
+        // Recorre cada icono y agrega el evento click
+        moreUpIcons.forEach(function(icon) {
+            icon.addEventListener("click", function() {
+                // Obtener el idEvento desde el atributo data-id-evento
+                const idEvento = this.getAttribute("data-id-evento");
+
+                // Construir la URL de destino
+                const url = "Evento.php?idEvento=" + idEvento;
+
+                // Redirigir a la URL
+                window.location.href = url;
+            });
+        });
+    });
+</script>

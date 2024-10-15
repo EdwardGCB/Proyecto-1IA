@@ -26,7 +26,7 @@ class EventoDAO{
     $this->categoria = $categoria;
   }
 
-  public function consultarPorProveedor($inicio, $datos){
+  public function consultarPorProveedor($inicio=null, $datos=null){
     return "
     select idEvento, nombre, fechaEvento, horaEvento, ciudad_idCiudad, Categoria_idCategoria
     from Evento
@@ -34,7 +34,7 @@ class EventoDAO{
     limit $inicio,$datos";
   }
 
-  public function consultarPorBusqueda($value, $inicio, $datos){
+  public function consultarPorBusqueda($value=null, $inicio=null, $datos=null){
     return "
     select idEvento, nombre, fechaEvento, horaEvento, ciudad_idCiudad, Categoria_idCategoria
     from Evento
@@ -83,6 +83,14 @@ class EventoDAO{
       where Proveedor_idProveedor = '". $this->proveedor->getIdPersona(). "' and fechaEvento >= '". $date. "'
       order by fechaEvento asc
       limit 1";
+  }
+
+  public function consultarPorCategoria(){
+    return "
+    select idEvento, sitio, flayer, logo, edadMinima, nombre, fechaEvento, horaEvento, Proveedor_idProveedor, ciudad_idCiudad
+    from Evento
+    where Categoria_idCategoria = '". $this->categoria->getIdCategoria()."'
+    order by nombre asc";
   }
 
 }
