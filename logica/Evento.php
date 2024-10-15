@@ -114,5 +114,36 @@ class Evento{
     $this->categoria = $categoria;
   }
 
+  public function consultarEvento($idEvento) {
+    $conexion = new Conexion();
+    $conexion->abrirConexion();
+    $EventoDAO = new EventoDAO();
+
+    $conexion->ejecutarConsulta($EventoDAO->consultaIndividual($idEvento));
+
+    if ($registro = $conexion->siguienteRegistro()) {
+        $evento = new Evento(
+            $registro[0],
+            $registro[1],
+            $registro[2],
+            $registro[3],
+            $registro[4],
+            $registro[5],
+            $registro[6],
+            $registro[7],
+            $registro[8],
+            $registro[9]
+
+        );
+    } else {
+        $evento = null;
+    }
+
+    $conexion->cerrarConexion();
+    
+    return $evento;
 }
+
+
+  }
 ?>
