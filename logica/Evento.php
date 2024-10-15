@@ -140,10 +140,107 @@ class Evento{
     }
 
     $conexion->cerrarConexion();
-    
+
     return $evento;
+  public function consultarPorProveedor($value = null) {
+    $eventos = array();
+    $ciudades = array();
+    $categorias = array();
+    $conexion = new Conexion();
+    $conexion->abrirConexion();
+    $eventoDAO = new EventoDAO(null, null, null, null, null, null, null, null, $this->proveedor);
+    $consulta = ($value == null) ? $eventoDAO->consultarPorProveedor() : $eventoDAO->consultarPorBusqueda($value);
+    $conexion->ejecutarConsulta($consulta);
+    while ($registro = $conexion->siguienteRegistro()) {
+      $categoria=null;
+      $ciudad=null;
+      if(array_key_exists($registro[4],$ciudades)){
+        $ciudad = $ciudades[$registro[4]];
+      }else{
+        $ciudad = new Ciudad($registro[4]);
+        $ciudad -> consultarPorId();
+        $ciudades[$registro[4]] = $ciudad;
+      }
+      if(array_key_exists($registro[5],$categorias)){
+        $categoria = $categorias[$registro[5]];
+      }else{
+        $categoria = new Categoria($registro[5]);
+        $categoria -> consultarPorId();
+        $categorias[$registro[5]] = $categoria;
+      }
+        $evento = new Evento($registro[0], null, null, null, null, $registro[1], $registro[2], $registro[3], $this->proveedor, $ciudad, $categoria);
+        array_push($eventos, $evento);
+    }
+
+    $conexion->cerrarConexion();
+    return $eventos;
 }
 
-
+  public function agregar() {
+    $conexion = new Conexion();
+    $conexion->abrirConexion();
+    $this->idEvento = rand(1, 1000000);
+    if($this->consultaIndividual()==false){
+      $eventoDAO = new EventoDAO($this->idEvento, $this->sitio, $this->flayer, $this->logo, $this->edadMinima, $this->nombre, $this->fechaEvento, $this->horaEvento, $this->proveedor, $this->ciudad, $this->categoria);
+      $conexion->ejecutarConsulta($eventoDAO->agregar());
+      $conexion->cerrarConexion();
+      return true;
+    }else{
+      $conexion->cerrarConexion();
+      $this->agregar();
+    }
   }
+
+  public function consultaIndividual() {
+    $conexion = new Conexion();
+    $conexion->abrirConexion();
+    $eventoDAO = new EventoDAO($this->idEvento);
+    $conexion -> ejecutarConsulta($eventoDAO->consultaIndividual());
+    if($conexion -> numeroFilas() == 0){
+      $conexion -> cerrarConexion();
+      return false;
+    }else{
+      $conexion -> cerrarConexion();
+      return true;
+    }
+  }
+
+  public function consultaPorID(){
+    $conexion = new Conexion();
+    $conexion->abrirConexion();
+    $eventoDAO = new EventoDAO($this->idEvento, null,null,null,null,null,null,null,$this->proveedor);
+    $conexion -> ejecutarConsulta($eventoDAO->consultaPorID());
+    if($conexion -> numeroFilas() == 0){
+      $conexion -> cerrarConexion();
+      return false;
+    }else{
+      $registro = $conexion -> siguienteRegistro();
+      $this->sitio = $registro[0];
+      $this->flayer = $registro[1];
+      $this->logo = $registro[2];
+      $this->edadMinima = $registro[3];
+      $this->nombre = $registro[4];
+      $this->fechaEvento = $registro[5];
+      $this->horaEvento = $registro[6];
+      $ciudad=new Ciudad($registro[7]);
+      $ciudad->consultarPorId();
+      $this->ciudad = $ciudad;
+      $categoria = new Categoria($registro[8]);
+      $categoria->consultarPorId();
+      $this->categoria = $categoria;
+      $conexion -> cerrarConexion();
+      return true;
+    }
+  }
+
+  public function numeroEventosProveedor(){
+    $conexion = new Conexion();
+    $conexion->abrirConexion();
+    $eventoDAO = new EventoDAO(null, null, null, null, null, null, null, null, $this->proveedor);
+    $conexion -> ejecutarConsulta($eventoDAO->numeroEventosProveedor());
+    $numero = $conexion -> numeroFilas();
+    $conexion -> cerrarConexion();
+    return $numero;
+  }
+}
 ?>

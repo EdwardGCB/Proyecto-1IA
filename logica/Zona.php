@@ -1,4 +1,7 @@
 <?php
+
+require_once "../persistencia/Conexion.php";
+require "../persistencia/ZonaDAO.php";
 class Zona{
   private $idZona;
   private $nombre;
@@ -42,6 +45,20 @@ class Zona{
     $this -> nombre = $nombre;
     $this -> color = $color;
     $this -> asiento = $asiento;
+  }
+
+  public function consultarTodos(){
+    $zonas = array();
+    $conexion = new Conexion();
+    $conexion->abrirConexion();
+    $zonaDAO = new ZonaDAO();
+    $conexion->ejecutarConsulta($zonaDAO->consultarTodos());
+    while($resultado = $conexion->siguienteRegistro()){
+      $zona = new Zona($resultado[0], $resultado[1], $resultado[2]);
+      array_push($zonas, $zona);
+    }
+    $conexion->cerrarConexion();
+    return $zonas;
   }
 
 }

@@ -18,5 +18,6 @@ include "../componentes/encabezado.php";
   <?php
     include "../componentes/navProveedor.php";
   ?>
+  <?php include("../componentes/footer.php")?>
 </body>
 </html>

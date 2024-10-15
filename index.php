@@ -1,7 +1,6 @@
 <?php
 //require ("logica/Producto.php");
 require("logica/Categoria.php");
-require("logica/Ciudad.php");
 // require ("logica/Marca.php");
 include("componentes/encabezado.php");
 ?>
@@ -194,7 +193,7 @@ include("componentes/encabezado.php");
                     $categoriasPorColumna = 4; // Cuatro categorías por fila
 
                     foreach ($categorias as $index => $categoriaActual) {
-                        echo "<div class='col-3'>"; 
+                        echo "<div class='col-3'>";
                         echo "<a href='paginas/CategoriaEvento.php?idCategoria=" . $categoriaActual->getIdCategoria() . "'><div class='p-3 border bg-light square'>";
                         echo htmlspecialchars($categoriaActual->getNombre()); // Muestra el nombre de la categoría
                         echo "</div></a>";
@@ -206,7 +205,7 @@ include("componentes/encabezado.php");
                         }
                     }
                     ?>
-                </div>       
+                </div>
             </div>
         </div>
     </div>

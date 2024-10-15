@@ -1,9 +1,8 @@
 <?php
+require_once ("./persistencia/Conexion.php");
+require ("./persistencia/CategoriaDAO.php");
 
-require_once (dirname(__DIR__) . '/persistencia/Conexion.php');
-require_once (dirname(__DIR__) . '/persistencia/CategoriaDAO.php');
-
-class Categoria {
+class Categoria{
     private $idCategoria;
     private $nombre;
 
@@ -19,39 +18,38 @@ class Categoria {
         $this->nombre = $nombre;
     }
 
-    public function __construct($idCategoria = 0, $nombre = ""){
-        $this->idCategoria = $idCategoria;
-        $this->nombre = $nombre;
+    public function __construct($idCategoria=0, $nombre=""){
+        $this -> idCategoria = $idCategoria;
+        $this -> nombre = $nombre;
     }
-
-    // Método para consultar todas las categorías
+    
     public function consultarCategorias(){
         $categorias = array();
         $conexion = new Conexion();
-        $conexion->abrirConexion();
+        $conexion -> abrirConexion();
         $categoriaDAO = new CategoriaDAO();
-        $conexion->ejecutarConsulta($categoriaDAO->consultarCategorias());
-        while ($registro = $conexion->siguienteRegistro()) {
+        $conexion -> ejecutarConsulta($categoriaDAO -> consultarCategorias());
+        while($registro = $conexion -> siguienteRegistro()){
             $categoria = new Categoria($registro[0], $registro[1]);
             array_push($categorias, $categoria);
         }
-        $conexion->cerrarConexion();
+        $conexion -> cerrarConexion();
         return $categorias;        
     }
 
     public function consultarPorCategoria($idCategoria) {
-        $eventos = array();    
+        $eventos = array();
         $conexion = new Conexion();
         $conexion->abrirConexion();
         $categoriaDAO = new CategoriaDAO();
-    
+
         // Ejecutar consulta para obtener eventos por categoría
         $conexion->ejecutarConsulta($categoriaDAO->consultaIndividual($idCategoria));
-    
-        while ($registro = $conexion->siguienteRegistro()) {
-    
 
-    
+        while ($registro = $conexion->siguienteRegistro()) {
+
+
+
             // Crear el objeto Evento
             $evento = new Evento(
                 $registro[0],  // idEvento
@@ -62,15 +60,28 @@ class Categoria {
                 $registro[5],  // nombre del evento
                 $registro[6],  // fechaEvento
                 $registro[7],  // horaEvento
-                $registro[8],  
+                $registro[8],
                 $registro[9],
             );
             array_push($eventos, $evento);
         }
-    
+
         $conexion->cerrarConexion();
         return $eventos;
     }
-    
+
 }
+
+    public function consultarPorId(){
+        $conexion = new Conexion();
+        $conexion -> abrirConexion();
+        $categoriaDAO = new CategoriaDAO($this->idCategoria);
+        $conexion -> ejecutarConsulta($categoriaDAO -> consultarPorId());
+        $registro = $conexion -> siguienteRegistro();
+        $this -> nombre = $registro[0];
+        $conexion -> cerrarConexion();
+        return true;
+    }
+}
+
 ?>
