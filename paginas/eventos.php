@@ -25,9 +25,9 @@ if($paginaActual > $paginas){
   header("Location: eventos.php?pagina=1");
 }
 if(isset($_POST["buscar"])){
-  $eventos = $evento -> consultarPorProveedor($_POST["inputBuscar"]);
+  $eventos = $evento -> consultarPorProveedor($_POST["inputBuscar"], (($paginaActual-1)*$cantidadDatosMostrar),$cantidadDatosMostrar);
 }else{
-  $eventos = $evento -> consultarPorProveedor();
+  $eventos = $evento -> consultarPorProveedor(null,(($paginaActual-1)*$cantidadDatosMostrar),$cantidadDatosMostrar);
 }
 if (isset($_POST["agregarEvento"])) {
   $nombre = $_POST["nombreEvento"];
@@ -37,7 +37,7 @@ if (isset($_POST["agregarEvento"])) {
   $ubicacion = $_POST["ubicacionEvento"];
   $ciudad = new Ciudad($_POST["ciudad"]);
   $categoria = new Categoria($_POST["categoria"]);
-  $evento = new Evento(null,"defaultSitio.png", "defaultFlayer.png", "defaultLogo.png", $edadMinima, $nombre, $fecha, $hora, $proveedor, $ciudad, $categoria);
+  $evento = new Evento(null,$ubicacion, "defaultFlayer.png", "defaultLogo.png", $edadMinima, $nombre, $fecha, $hora, $proveedor, $ciudad, $categoria);
   if($evento -> agregar()){
     echo "<p>evento agregado</p>";
   }
@@ -56,7 +56,7 @@ height: 100vh;
       <?php include "../componentes/navProveedor.php"; ?>
     </div>
     <div class="col-10">
-      <div class="container">
+      <div class="container-sm">
         <div class="container mt-3">
           <div class="container-fluid">
             <h2>Mis eventos</h2>

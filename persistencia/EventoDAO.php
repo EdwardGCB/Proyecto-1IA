@@ -26,18 +26,21 @@ class EventoDAO{
     $this->categoria = $categoria;
   }
 
-  public function consultarPorProveedor(){
+  public function consultarPorProveedor($inicio, $datos){
     return "
     select idEvento, nombre, fechaEvento, horaEvento, ciudad_idCiudad, Categoria_idCategoria
     from Evento
-    where Proveedor_idProveedor = '" .$this->proveedor->getIdPersona(). "'";
+    where Proveedor_idProveedor = '" .$this->proveedor->getIdPersona(). "'
+    limit $inicio,$datos";
   }
 
-  public function consultarPorBusqueda($value){
+  public function consultarPorBusqueda($value, $inicio, $datos){
     return "
     select idEvento, nombre, fechaEvento, horaEvento, ciudad_idCiudad, Categoria_idCategoria
     from Evento
-    where Proveedor_idProveedor = '" .$this->proveedor->getIdPersona(). "' and nombre= '". $value ."'";
+    where Proveedor_idProveedor = '" .$this->proveedor->getIdPersona(). "' and nombre= '". $value ."'
+    limit $inicio,$datos
+    ";
   }
 
   public function agregar(){

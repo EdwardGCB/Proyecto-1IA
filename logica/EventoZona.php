@@ -46,7 +46,7 @@ class EventoZona{
     $this -> zona = $zona;
   }
 
-  public function consultarPorEvento() {
+  public function consultarPorEvento($limite=null) {
     $zonas = array();
     $eventosZona = array();
     $conexion = new Conexion();

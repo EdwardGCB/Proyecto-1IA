@@ -117,14 +117,14 @@ class Evento{
     $this->categoria = $categoria;
   }
 
-  public function consultarPorProveedor($value = null) {
+  public function consultarPorProveedor($value = null, $inicio=0, $datos=0) {
     $eventos = array();
     $ciudades = array();
     $categorias = array();
     $conexion = new Conexion();
     $conexion->abrirConexion();
     $eventoDAO = new EventoDAO(null, null, null, null, null, null, null, null, $this->proveedor);
-    $consulta = ($value == null) ? $eventoDAO->consultarPorProveedor() : $eventoDAO->consultarPorBusqueda($value);
+    $consulta = ($value == null) ? $eventoDAO->consultarPorProveedor($inicio, $datos) : $eventoDAO->consultarPorBusqueda($value, $inicio, $datos);
     $conexion->ejecutarConsulta($consulta);
     while ($registro = $conexion->siguienteRegistro()) {
       $categoria=null;
