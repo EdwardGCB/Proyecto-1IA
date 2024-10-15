@@ -69,6 +69,19 @@ class EventoZona{
     return $eventosZona;
   }
 
+  public function cantidadReservas(){
+    $zonaReservadas = array();
+    $conexion = new Conexion();
+    $conexion->abrirConexion();
+    $EventoZonaDAO = new EventoZonaDAO(null,null,$this->evento);
+    $conexion->ejecutarConsulta($EventoZonaDAO->cantidadReservas());
+    while($resultado = $conexion->siguienteRegistro()){
+      $zonaReservadas[$resultado[1]] = $resultado[0];
+    }
+    $conexion->cerrarConexion();
+    return $zonaReservadas;
+  }
+
   public function insertar(){
     $conexion = new Conexion();
     $conexion->abrirConexion();

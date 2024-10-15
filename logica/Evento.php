@@ -226,5 +226,20 @@ class Evento{
     $conexion->cerrarConexion();
     return true;
   }
+
+  public function eventoCercano($date){
+    $conexion = new Conexion();
+    $conexion->abrirConexion();
+    $eventoDAO = new EventoDAO(null, null, null, null, null, null, null, null, $this->proveedor);
+    $conexion -> ejecutarConsulta($eventoDAO->eventoCercano($date));
+    $resultado = $conexion -> siguienteRegistro();
+    $ciudad = new Ciudad($resultado[6]);
+    $ciudad->consultarPorId();
+    $categoria = new Categoria($resultado[7]);
+    $categoria->consultarPorId();
+    $evento = new Evento($resultado[0],$resultado[1],null,null,$resultado[2],$resultado[3],$resultado[4],$resultado[5],$this->proveedor,$ciudad, $categoria);
+    $conexion -> cerrarConexion();
+    return $evento;
+  }
 }
 ?>

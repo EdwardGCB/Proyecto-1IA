@@ -73,5 +73,14 @@ class EventoDAO{
       where idEvento = '". $this->idEvento. "' and Proveedor_idProveedor = '". $this->proveedor->getIdPersona(). "'";
   }
 
+  public function eventoCercano($date){
+    return "
+      select idEvento, sitio, edadMinima, nombre, fechaEvento, horaEvento, ciudad_idCiudad, Categoria_idCategoria
+      from Evento
+      where Proveedor_idProveedor = '". $this->proveedor->getIdPersona(). "' and fechaEvento >= '". $date. "'
+      order by fechaEvento asc
+      limit 1";
+  }
+
 }
 ?>

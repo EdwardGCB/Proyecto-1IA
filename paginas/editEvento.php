@@ -41,13 +41,13 @@ if(isset($_POST["agregar"])){
   $eventoZona->insertar();
 }
 if(isset($_POST["guardar"])){
-  $evento->setNombre($_POST["nombre"]);
+  $evento->setNombre($_POST["nombreEvento"]);
   $evento->setEdadMinima($_POST["edadMinima"]);
   $evento->setFechaEvento($_POST["fechaEvento"]);
   $evento->setHoraEvento($_POST["horaEvento"]);
   $ciudad = new Ciudad($_POST["ciudad"]);
   $evento->setCiudad($ciudad);
-  $categoria = new Categoria($_POST["sitio"]);
+  $categoria = new Categoria($_POST["categoria"]);
   $evento->setCategoria($categoria);
   if($evento->actualizar()){
     header("Location: editEvento.php?id=".$evento->getIdEvento()."");
@@ -140,28 +140,28 @@ height: 100%;
                   </select>
                   <!-- boton para guardar los cambios-->
                   <button type="submit" class="btn btn-primary" name="guardar">Guardar Cambios</button>
-                  </div>
-                </form>
               </div>
+              </form>
             </div>
           </div>
-          <div class="container mt-4">
-            <!--Zonas y tabla de zonas-->
-            <div class="row mt-5">
-              <div class="col-md-6">
-                <div class="card">
-                  <div class="card-header text-white bg-dark">
-                    Zonas
-                  </div>
-                  <div class="card-body">
-                    <!--zonas-->
-                    <div id="dynamicForm" class="hidden mt-3">
-                      <form id="moduleForm" method="post" action="editEvento.php?id=<?php echo $evento->getIdEvento()?>">
-                        <div class="mb-3">
-                          <label for="selectField" class="form-label">Select Field</label>
-                          <select id="selectField" class="form-select" name="zona">
-                            >
-                            <?php
+        </div>
+        <div class="container mt-4">
+          <!--Zonas y tabla de zonas-->
+          <div class="row mt-5">
+            <div class="col-md-6">
+              <div class="card">
+                <div class="card-header text-white bg-dark">
+                  Zonas
+                </div>
+                <div class="card-body">
+                  <!--zonas-->
+                  <div id="dynamicForm" class="hidden mt-3">
+                    <form id="moduleForm" method="post" action="editEvento.php?id=<?php echo $evento->getIdEvento()?>">
+                      <div class="mb-3">
+                        <label for="selectField" class="form-label">Select Field</label>
+                        <select id="selectField" class="form-select" name="zona">
+                          >
+                          <?php
                                 $zonat = new Zona();
                                 $zonas = $zonat->consultarTodos();
                                 foreach ($zonas as $zonaActual) {
@@ -169,47 +169,46 @@ height: 100%;
                                   echo '<option value="' . $zonaActual->getIdZona() . '" ' . $selected . '>' . $zonaActual->getNombre() . '</option>';
                                 }
                               ?>
-                          </select>
-                        </div>
-                        <!--columna del asiento-->
-                        <div class="form-floating mb-3">
-                          <input type="text" class="form-control" id="input1" name="columna"
-                            value="<?php echo  (isset($columnasAsientos))? $columnasAsientos : '1-10'?>" readonly>
-                          <label for="input1" class="form-label">Cantidad de columnas</label>
-                        </div>
-                        <!--fila del asiento-->
-                        <div class="form-floating mb-3">
-                          <input type="text" class="form-control" id="input2" name="fila"
-                            value="<?php echo (isset($filaAsientos))? $filaAsientos: '1-26'?>" readonly>
-                          <label for="input2" class="form-label">Cantidad de filas</label>
-                        </div>
-                        <!--precio de la zona-->
-                        <div class="form-floating mb-3">
-                          <input type="text" class="form-control" id="input2" name="valor" placeholder="Enter text">
-                          <label for="input2" name="precio" class="form-label">Precio de la zona</label>
-                        </div>
-                        <!--aforo-->
-                        <div class="form-floating mb-3">
-                          <input type="text" class="form-control" id="input3" name="aforo" placeholder="Enter text"
-                            value="<?php echo (isset($filaAsientos) && isset($columnasAsientos))? ($filaAsientos*$columnasAsientos): '' ?>"
-                            readonly>
-                          <label for="input3" class="form-label">Aforo</label>
-                        </div>
-                        <button type="submit" name="refresh" class="btn btn-secondary">refrescar</button>
-                        <button type="submit" name="agregar" class="btn btn-success">Agregar</button>
-                      </form>
-                    </div>
+                        </select>
+                      </div>
+                      <!--columna del asiento-->
+                      <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="input1" name="columna"
+                          value="<?php echo  (isset($columnasAsientos))? $columnasAsientos : '1-10'?>" readonly>
+                        <label for="input1" class="form-label">Cantidad de columnas</label>
+                      </div>
+                      <!--fila del asiento-->
+                      <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="input2" name="fila"
+                          value="<?php echo (isset($filaAsientos))? $filaAsientos: '1-26'?>" readonly>
+                        <label for="input2" class="form-label">Cantidad de filas</label>
+                      </div>
+                      <!--precio de la zona-->
+                      <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="input2" name="valor" placeholder="Enter text">
+                        <label for="input2" name="precio" class="form-label">Precio de la zona</label>
+                      </div>
+                      <!--aforo-->
+                      <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="input3" name="aforo" placeholder="Enter text"
+                          value="<?php echo (isset($filaAsientos) && isset($columnasAsientos))? ($filaAsientos*$columnasAsientos): '' ?>"
+                          readonly>
+                        <label for="input3" class="form-label">Aforo</label>
+                      </div>
+                      <button type="submit" name="refresh" class="btn btn-secondary">refrescar</button>
+                      <button type="submit" name="agregar" class="btn btn-success">Agregar</button>
+                    </form>
                   </div>
                 </div>
               </div>
-              <div class="col-md-6">
-                <div class="card">
-                  <div class="card-header text-white bg-dark">
-                    Tabla de Zonas
-                  </div>
-                  <div class="card-body">
-                    <?php include "../componentes/tablaEventosZona.php"?>
-                  </div>
+            </div>
+            <div class="col-md-6">
+              <div class="card">
+                <div class="card-header text-white bg-dark">
+                  Tabla de Zonas
+                </div>
+                <div class="card-body">
+                  <?php include "../componentes/tablaEventosZona.php"?>
                 </div>
               </div>
             </div>
@@ -217,7 +216,7 @@ height: 100%;
         </div>
       </div>
     </div>
-    <?php include("../componentes/footer.php")?>
+  </div>
 </body>
 
 </html>
