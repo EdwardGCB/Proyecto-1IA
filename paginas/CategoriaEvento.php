@@ -1,4 +1,6 @@
-    <body>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=more_up" />
+
+<body>
     <?php
     require_once(dirname(__DIR__) . '/componentes/encabezado.php');
     require_once(dirname(__DIR__) . '/componentes/navcliente.php');
@@ -9,7 +11,6 @@
     require_once(dirname(__DIR__) . '/logica/Ciudad.php');
 
     ?>
-
 
     <br>
 
@@ -69,9 +70,17 @@
                                     <i class="fa fa-map-marker"></i>
                                     <p>Proveedor: <?php echo htmlspecialchars($eventoActual->getProveedor()); ?></p>
                                     <p>Ciudad: <?php echo htmlspecialchars($eventoActual->getCiudad()); ?></p>
-                                    <p>Categoría: <?php echo htmlspecialchars($eventoActual->getCategoria()); ?></p>
+                                    <p>
+                                    <span class="material-symbols-outlined moreUpIcon" 
+                                            data-id-evento="<?php 
+                                            echo htmlspecialchars($eventoActual->getIdEvento()); 
+                                            ?>">
+                                        more_up
+                                    </span>
+                                </p>
+
                                 </div>
-                                <a href="#">Comprar</a>
+
                             </section>
                         </article>
 
@@ -86,7 +95,25 @@
             ?>
         </div>
     </section>
-
-
-
 </body>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Selecciona todos los elementos con la clase 'moreUpIcon'
+        const moreUpIcons = document.querySelectorAll(".moreUpIcon");
+
+        // Recorre cada icono y agrega el evento click
+        moreUpIcons.forEach(function(icon) {
+            icon.addEventListener("click", function() {
+                // Obtener el idEvento desde el atributo data-id-evento
+                const idEvento = this.getAttribute("data-id-evento");
+
+                // Construir la URL de destino
+                const url = "Evento.php?idEvento=" + idEvento;
+
+                // Redirigir a la URL
+                window.location.href = url;
+            });
+        });
+    });
+</script>
