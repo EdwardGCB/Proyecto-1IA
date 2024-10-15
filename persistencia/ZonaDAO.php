@@ -11,6 +11,12 @@ class ZonaDAO{
     $this -> color = $color;
     $this -> asiento = $asiento;
   }
+  
+  public function consultarTodos(){
+    return "SELECT idZona, nombre, color
+            FROM Zona
+            ORDER BY nombre ASC";
+  }
 
 }
 ?>

@@ -1,4 +1,5 @@
 <?php
+require_once("../persistencia/Conexion.php");
 class Asiento{
   private $fila;
   private $columna;
@@ -32,6 +33,25 @@ class Asiento{
     $this -> fila = $fila;
     $this -> columna = $columna;
     $this -> estado = $estado;
+  }
+
+  public function crearAsientos(){
+    $insertQuery = "INSERT INTO asiento (fila, columna, estado) VALUES ";
+    $rows = range('A', 'Z');
+    $columns = range(1, 10);
+    $values = [];
+
+    foreach ($rows as $row) {
+        foreach ($columns as $col) {
+            $values[] = "('$row', $col, 0)";
+        }
+    }
+
+    $insertQuery .= implode(", ", $values) . ";";
+    $conexion = new Conexion();
+    $conexion -> abrirConexion();
+    $conexion -> ejecutarConsulta($insertQuery);
+    $conexion -> cerrarConexion();
   }
 }
 ?>

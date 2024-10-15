@@ -1,6 +1,5 @@
 <?php
 session_start();
-$bandera = false;
 if(!isset($_SESSION["id"])){
   header("Location: ../index.php");    
 }
@@ -14,7 +13,7 @@ $proveedor = new Proveedor($id);
 $proveedor -> consultar();
 $evento = new Evento(null, null, null, null, null, null, null, null, $proveedor);
 $cantidadDatos = $evento -> numeroEventosProveedor();
-$cantidadDatosMostrar =24;
+$cantidadDatosMostrar = 10;
 $paginas = ceil($cantidadDatos / $cantidadDatosMostrar);
 if(!isset($_GET["pagina"])){
   header("Location: eventos.php?pagina=1");
@@ -57,33 +56,34 @@ height: 100vh;
       <?php include "../componentes/navProveedor.php"; ?>
     </div>
     <div class="col-10">
-      <nav class="navbar navbar-light bg-light">
-        <div class="container-fluid">
-          <h2>Mis eventos</h2>
-        </div>
-      </nav>
-      <div class="container mt-3">
-        <form class="d-flex" role="search" method="post" action="eventos.php">
-          <input class="form-control me-2" type="search" name="inputBuscar" placeholder="Buscar" aria-label="Buscar">
-          <button class="btn btn-outline-success me-2" name="buscar" type="submit">
-            <span class="material-symbols-rounded">search</span>
-          </button>
-          <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-            <span class="material-symbols-rounded">add</span>
-          </button>
-        </form>
-        <table class="table table-striped">
-          <thead>
-            <tr>
-              <th scope="col">#</th>
-              <th scope="col">Nombre</th>
-              <th scope="col">Fecha Evento</th>
-              <th scope="col">Ciudad</th>
-              <th scope="col">Categoria</th>
-            </tr>
-          </thead>
-          <tbody>
-            <?php
+      <div class="container">
+        <nav class="navbar navbar-light bg-light">
+          <div class="container-fluid">
+            <h2>Mis eventos</h2>
+          </div>
+        </nav>
+        <div class="container mt-3">
+          <form class="d-flex" role="search" method="post" action="eventos.php?pagina=<?php echo $paginaActual?>">
+            <input class="form-control me-2" type="search" name="inputBuscar" placeholder="Buscar" aria-label="Buscar">
+            <button class="btn btn-outline-success me-2" name="buscar" type="submit">
+              <span class="material-symbols-rounded">search</span>
+            </button>
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+              <span class="material-symbols-rounded">add</span>
+            </button>
+          </form>
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Nombre</th>
+                <th scope="col">Fecha Evento</th>
+                <th scope="col">Ciudad</th>
+                <th scope="col">Categoria</th>
+              </tr>
+            </thead>
+            <tbody>
+              <?php
               foreach ($eventos as $eventoActual) {
                   echo "<tr>";
                   echo "<th scope='row'>" . $eventoActual->getIdEvento() . "</th>";
@@ -91,7 +91,7 @@ height: 100vh;
                   echo "<td>" . $eventoActual->getFechaEvento() . "<br>" . $eventoActual->getHoraEvento() . "</td>";
                   echo "<td>" . $eventoActual->getCiudad()->getNombre() . "</td>";
                   echo "<td>" . $eventoActual->getCategoria()->getNombre() . "</td>";
-                  echo "<td><a href='edit_evento.php?id=" . $eventoActual->getIdEvento() . "' class='btn btn-success' style='color: white;'>
+                  echo "<td><a href='editEvento.php?id=" . $eventoActual->getIdEvento() . "' class='btn btn-success' style='color: white;'>
                     <span class='material-symbols-rounded'>
                       edit
                     </span>
@@ -99,26 +99,31 @@ height: 100vh;
                   echo "</tr>";
               }
             ?>
-          </tbody>
-        </table>
-        <nav aria-label="Page navigation example">
-          <ul class="pagination justify-content-end">
-            <li class="page-item">
-              <a class="page-link <?php echo ($paginaActual-1 < 1)?  "disabled" : "" ?>" href="eventos.php?pagina=<?php echo ($paginaActual-1 != 0)?$paginaActual-1:"" ?>" aria-label="Previous" >
-                <span aria-hidden="true">&laquo;</span>
-              </a>
-            </li>
-            <?php for($i=0;$i<$paginas;$i++){
+            </tbody>
+          </table>
+          <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-end">
+              <li class="page-item">
+                <a class="page-link <?php echo ($paginaActual-1 < 1)?  "disabled" : "" ?>"
+                  href="eventos.php?pagina=<?php echo ($paginaActual-1 != 0)?$paginaActual-1:"" ?>"
+                  aria-label="Previous">
+                  <span aria-hidden="true">&laquo;</span>
+                </a>
+              </li>
+              <?php for($i=0;$i<$paginas;$i++){
               echo "<li class='page-item'><a class='page-link' href='eventos.php?pagina=".($i+1)."'>".($i+1)."</a></li>";
             }
             ?>
-            <li class="page-item">
-              <a class="page-link <?php echo ($paginaActual+1 > $paginas)?  "disabled" : "" ?>" href="eventos.php?pagina=<?php echo ($paginaActual+1 < $paginas)?"": $paginaActual+1 ?>" aria-label="Next">
-                <span aria-hidden="true">&raquo;</span>
-              </a>
-            </li>
-          </ul>
-        </nav>
+              <li class="page-item">
+                <a class="page-link <?php echo ($paginaActual+1 > $paginas)?  "disabled" : "" ?>"
+                  href="eventos.php?pagina=<?php echo ($paginaActual+1 < $paginas)?"": $paginaActual+1 ?>"
+                  aria-label="Next">
+                  <span aria-hidden="true">&raquo;</span>
+                  </a>
+              </li>
+            </ul>
+          </nav>
+        </div>
       </div>
     </div>
   </div>

@@ -114,9 +114,7 @@ include("../componentes/encabezado.php");
 							</div>
 						</div>
 					</div>
-					<div class="text-center mt-5 text-muted">
-						Copyright &copy; 2024 &mdash; Ticketera.co 
-					</div>
+					<?php include("../componentes/footer.php")?>
 				</div>
 			</div>
 		</div>

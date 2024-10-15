@@ -180,6 +180,34 @@ class Evento{
     }
   }
 
+  public function consultaPorID(){
+    $conexion = new Conexion();
+    $conexion->abrirConexion();
+    $eventoDAO = new EventoDAO($this->idEvento, null,null,null,null,null,null,null,$this->proveedor);
+    $conexion -> ejecutarConsulta($eventoDAO->consultaPorID());
+    if($conexion -> numeroFilas() == 0){
+      $conexion -> cerrarConexion();
+      return false;
+    }else{
+      $registro = $conexion -> siguienteRegistro();
+      $this->sitio = $registro[0];
+      $this->flayer = $registro[1];
+      $this->logo = $registro[2];
+      $this->edadMinima = $registro[3];
+      $this->nombre = $registro[4];
+      $this->fechaEvento = $registro[5];
+      $this->horaEvento = $registro[6];
+      $ciudad=new Ciudad($registro[7]);
+      $ciudad->consultarPorId();
+      $this->ciudad = $ciudad;
+      $categoria = new Categoria($registro[8]);
+      $categoria->consultarPorId();
+      $this->categoria = $categoria;
+      $conexion -> cerrarConexion();
+      return true;
+    }
+  }
+
   public function numeroEventosProveedor(){
     $conexion = new Conexion();
     $conexion->abrirConexion();

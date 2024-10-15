@@ -48,7 +48,7 @@
                 foreach ($ciudades as $ciudadActual) {
                     echo '<option value="'. $ciudadActual->getIdCiudad(). '">'. $ciudadActual->getNombre(). '</option>';
                 }
-            ?>
+              ?>
             </select>
             <!-- Tipo de evento -->
 

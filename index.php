@@ -217,5 +217,5 @@ include("componentes/encabezado.php");
         </div>
     </div>
 </body>
-    <?php include("componentes/footer.php")?>
+<?php include("componentes/footer.php")?>
 </html>

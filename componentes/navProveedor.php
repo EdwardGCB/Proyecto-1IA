@@ -35,5 +35,4 @@
       <li><a class="dropdown-item" href="../index.php?cerrarSesion=1">Cerrar Sesion</a></li>
     </ul>
   </div>
-  <?php include("footer.php")?>
 </div>
