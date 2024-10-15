@@ -6,7 +6,6 @@ class Zona{
   private $idZona;
   private $nombre;
   private $color;
-  private $asiento;
 
   public function getIdZona() {
     return $this->idZona;
@@ -18,10 +17,6 @@ class Zona{
   
   public function getColor() {
     return $this->color;
-  }
-  
-  public function getAsiento() {
-    return $this->asiento;
   }
   
   public function setIdZona($idZona) {
@@ -36,15 +31,11 @@ class Zona{
     $this->color = $color;
   }
   
-  public function setAsiento($asiento) {
-    $this->asiento = $asiento;
-  }
 
-  public function __construct($idZona=0, $nombre="", $color="", $asiento=""){
+  public function __construct($idZona=0, $nombre="", $color=""){
     $this -> idZona = $idZona;
     $this -> nombre = $nombre;
     $this -> color = $color;
-    $this -> asiento = $asiento;
   }
 
   public function consultarTodos(){
@@ -61,5 +52,15 @@ class Zona{
     return $zonas;
   }
 
+  public function consultarPorId(){
+    $conexion = new Conexion();
+    $conexion->abrirConexion();
+    $zonaDAO = new ZonaDAO($this->idZona);
+    $conexion->ejecutarConsulta($zonaDAO->consultarPorId());
+    $resultado = $conexion->siguienteRegistro();
+    $this->nombre = $resultado[0];
+    $this->color = $resultado[1];
+    $conexion->cerrarConexion();
+  }
 }
 ?>

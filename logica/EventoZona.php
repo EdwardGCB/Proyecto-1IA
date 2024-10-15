@@ -1,4 +1,6 @@
 <?php
+require_once "../persistencia/Conexion.php";
+require "../persistencia/EventoZonaDAO.php";
 class EventoZona{
   private $valor;
   private $aforo;
@@ -42,6 +44,37 @@ class EventoZona{
     $this -> aforo = $aforo;
     $this -> evento = $evento;
     $this -> zona = $zona;
+  }
+
+  public function consultarPorEvento() {
+    $zonas = array();
+    $eventosZona = array();
+    $conexion = new Conexion();
+    $conexion->abrirConexion();
+    $EventoZonaDAO = new EventoZonaDAO(null,null,$this->evento);
+    $conexion->ejecutarConsulta($EventoZonaDAO->consultarPorEvento());
+    while($registro = $conexion->siguienteRegistro()){
+      $zona=null;
+      if(array_key_exists($registro[2],$zonas)){
+        $zona = $zonas[$registro[2]];
+      }else{
+        $zona = new Zona($registro[2]);
+        $zona->consultarPorId();
+        $zonas[$registro[2]] = $zona;
+      }
+      $eventoZona = new EventoZona($registro[0],$registro[1],$this->evento,$zona);
+      array_push($eventosZona,$eventoZona);
+    }
+    $conexion->cerrarConexion();
+    return $eventosZona;
+  }
+
+  public function insertar(){
+    $conexion = new Conexion();
+    $conexion->abrirConexion();
+    $eventoZonaDAO = new EventoZonaDAO($this->valor, $this->aforo, $this->evento, $this->zona);
+    $conexion->ejecutarConsulta($eventoZonaDAO->insertar());
+    $conexion->cerrarConexion();
   }
 }
 ?>

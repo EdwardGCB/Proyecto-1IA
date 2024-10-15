@@ -1,5 +1,5 @@
-<div class="d-flex flex-column flex-shrink-0 p-3 bg-light full-height-sidebar" style="width: 280px;">
-  <a href="#" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
+<div class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark full-height-sidebar" style="width: 280px;">
+  <a href="#" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-light text-decoration-none">
     <span class="fs-4">Logo</span>
   </a>
   <hr>
@@ -7,13 +7,13 @@
   <ul class="nav nav-pills flex-column mb-auto">
     <li class="nav-item">
       <a href="../paginas/sesionProveedor.php"
-        class="nav-link <?= $paginaAct == 'sesionProveedor.php' ? 'active' : 'link-dark' ?>" aria-current="page">
+        class="nav-link <?= $paginaAct == 'sesionProveedor.php' ? 'active' : 'link-light' ?>" aria-current="page">
         <span class="material-symbols-rounded">home</span>
         Inicio
       </a>
     </li>
     <li>
-      <a href="../paginas/eventos.php" class="nav-link <?= $paginaAct == 'eventos.php' ? 'active' : 'link-dark' ?>">
+      <a href="../paginas/eventos.php" class="nav-link <?= $paginaAct == 'eventos.php' ? 'active' : 'link-light' ?>">
         <span class="material-symbols-rounded">local_activity</span>
         Eventos
       </a>
@@ -21,7 +21,7 @@
   </ul>
   <hr>
   <div class="dropdown">
-    <a href="#" class="d-flex align-items-center link-dark text-decoration-none dropdown-toggle" id="dropdownUser2"
+    <a href="#" class="d-flex align-items-center link-light text-decoration-none dropdown-toggle" id="dropdownUser2"
       data-bs-toggle="dropdown" aria-expanded="false">
       <strong>
         <?php echo $proveedor->getNombre(); ?>

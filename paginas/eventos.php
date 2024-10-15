@@ -57,12 +57,10 @@ height: 100vh;
     </div>
     <div class="col-10">
       <div class="container">
-        <nav class="navbar navbar-light bg-light">
+        <div class="container mt-3">
           <div class="container-fluid">
             <h2>Mis eventos</h2>
           </div>
-        </nav>
-        <div class="container mt-3">
           <form class="d-flex" role="search" method="post" action="eventos.php?pagina=<?php echo $paginaActual?>">
             <input class="form-control me-2" type="search" name="inputBuscar" placeholder="Buscar" aria-label="Buscar">
             <button class="btn btn-outline-success me-2" name="buscar" type="submit">
@@ -119,7 +117,7 @@ height: 100vh;
                   href="eventos.php?pagina=<?php echo ($paginaActual+1 < $paginas)?"": $paginaActual+1 ?>"
                   aria-label="Next">
                   <span aria-hidden="true">&raquo;</span>
-                  </a>
+                </a>
               </li>
             </ul>
           </nav>

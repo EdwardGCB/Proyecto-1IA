@@ -66,5 +66,12 @@ class EventoDAO{
     where Proveedor_idProveedor = '".$this->proveedor->getIdPersona()."'";
   }
 
+  public function actualizar(){
+    return "
+      update Evento
+      set sitio = '". $this->sitio. "', flayer = '". $this->flayer. "', logo = '". $this->logo. "', edadMinima = '". $this->edadMinima. "', nombre = '". $this->nombre. "', fechaEvento = '". $this->fechaEvento. "', horaEvento = '". $this->horaEvento. "', ciudad_idCiudad = '". $this->ciudad->getIdCiudad(). "', Categoria_idCategoria = '". $this->categoria->getIdCategoria(). "'
+      where idEvento = '". $this->idEvento. "' and Proveedor_idProveedor = '". $this->proveedor->getIdPersona(). "'";
+  }
+
 }
 ?>

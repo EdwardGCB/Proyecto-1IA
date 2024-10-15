@@ -217,5 +217,14 @@ class Evento{
     $conexion -> cerrarConexion();
     return $numero;
   }
+
+  public function actualizar(){
+    $conexion = new Conexion();
+    $conexion->abrirConexion();
+    $eventoDAO = new EventoDAO($this->idEvento, $this->sitio, $this->flayer, $this->logo, $this->edadMinima, $this->nombre, $this->fechaEvento, $this->horaEvento, $this->proveedor, $this->ciudad, $this->categoria);
+    $conexion->ejecutarConsulta($eventoDAO->actualizar());
+    $conexion->cerrarConexion();
+    return true;
+  }
 }
 ?>

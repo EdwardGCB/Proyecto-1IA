@@ -18,5 +18,11 @@ class ZonaDAO{
             ORDER BY nombre ASC";
   }
 
+  public function consultarPorID(){
+    return "SELECT nombre, color
+            FROM Zona
+            WHERE idZona = '" . $this -> idZona . "'";
+  }
+
 }
 ?>
