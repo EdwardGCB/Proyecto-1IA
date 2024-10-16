@@ -216,7 +216,23 @@ class Evento{
       $conexion -> cerrarConexion();
       return false;
     }else{
-      /*seteo los datos del evento */
+      $resultado = $conexion->siguienteRegistro();
+      $this->sitio = $resultado[0];
+      $this->flayer = $resultado[1];
+      $this->logo = $resultado[2];
+      $this->edadMinima = $resultado[3];
+      $this->nombre = $resultado[4];
+      $this->fechaEvento = $resultado[5];
+      $this->horaEvento = $resultado[6];
+      $proveedor = new Proveedor($resultado[7]);
+      $proveedor->consultarPorId();
+      $this->proveedor = $proveedor;
+      $ciudad = new Ciudad($resultado[8]);
+      $ciudad->consultarPorId();
+      $this->ciudad = $ciudad;
+      $categoria = new Categoria($resultado[9]);
+      $categoria->consultarPorId();
+      $this->categoria = $categoria;
       $conexion -> cerrarConexion();
       return true;
     }

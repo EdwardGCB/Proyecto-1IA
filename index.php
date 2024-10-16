@@ -58,7 +58,7 @@ height: 19vw;
             <p class="card-text">Fecha: <?=$evento->getFechaEvento()." / ".$evento->getHoraEvento()?></p>
             <p class="card-text">EdadMinima: <?=$evento->getEdadMinima()?></p>
             <p class="card-text">Categoria: <?=$evento->getCategoria()->getNombre()?></p>
-            <a href="paginas/eventoInfo.php?idEvento=<?= $evento->getIdEvento()?>" class="btn btn-primary">Ver más</a>
+            <a href="paginas/eventoInfo.php?idEvento=<?=$evento->getIdEvento()?>" class="btn btn-primary">Ver más</a>
           </div>
         </div>
       </div>
@@ -83,8 +83,7 @@ height: 19vw;
                 <h6 class="card-title"><?= $eventoActual->getNombre()?></h6>
                 <p class="card-text">Sitio: <?=$evento->getSitio()?></p>
                 <p class="card-text">Fecha: <?=$eventoActual->getFechaEvento()." / ".$evento->getHoraEvento()?></p>
-                <a href="paginas/eventoInfo.php?idEvento=<?= $eventoActual->getIdEvento()?>" class="btn btn-primary">Ver
-                  más</a>
+                <a href='paginas/eventoInfo.php?idEvento=<?=$eventoActual->getIdEvento()?>'>Ver más</a>
               </div>
             </div>
           </div>

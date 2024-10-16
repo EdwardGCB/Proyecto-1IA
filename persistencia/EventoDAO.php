@@ -59,7 +59,7 @@ class EventoDAO{
 
   public function consultaIndividual(){
     return "
-    select idEvento, sitio, flayer, logo, edadMinima, nombre, fechaEvento, horaEvento, ciudad_idciudad, Categoria_idCategoria
+    select sitio, flayer, logo, edadMinima, nombre, fechaEvento, horaEvento, Proveedor_idProveedor ,ciudad_idciudad, Categoria_idCategoria
     from Evento
     where idEvento = '". $this->idEvento."'";
   }

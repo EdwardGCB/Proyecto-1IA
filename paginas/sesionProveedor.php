@@ -1,7 +1,7 @@
 <?php
 session_start();
 if(!isset($_SESSION["id"])){
-
+  header("Location: ../index.php");
 }
 $id = $_SESSION["id"];
 require ("../logica/Persona.php");

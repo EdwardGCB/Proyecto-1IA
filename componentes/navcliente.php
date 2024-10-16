@@ -7,7 +7,7 @@ $categorias = $categoria->consultarCategorias();
   <nav class="navbar navbar-expand-lg">
     <div class="container-fluid">
       <a class="navbar-brand" href="#">
-        <img src="/docs/5.3/assets/brand/bootstrap-logo.svg" alt="Logo" width="30" height="24"
+        <img src="http://www.w3.org/2000/svg" alt="Logo" width="30" height="24"
           class="d-inline-block align-text-top">
         Bootstrap
       </a>
@@ -34,7 +34,7 @@ $categorias = $categoria->consultarCategorias();
           }?>
         </ul>
       </div>
-      <a href="paginas/iniciarSesion.php" class="btn bg-white text-muted ">
+      <a href="/xampp/Proyecto-1IA/paginas/iniciarSesion.php" class="btn bg-white text-muted ">
         <span class="material-symbols-rounded">person</span>
         <span>Iniciar Sesion</span>
       </a>
