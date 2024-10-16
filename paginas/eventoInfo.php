@@ -1,5 +1,6 @@
 <?php
-
+session_start();
+echo $_SESSION["id"];
 if(!isset($_GET["idEvento"])){
   header("Location: ../index.php");
 }
@@ -59,7 +60,7 @@ color: white;
           <img src="http://www.w3.org/2000/svg" alt="Logo" width="30" height="24" class="d-inline-block align-text-top">
           Bootstrap
         </a>
-        <a href="comprarEvento.php" class="btn button-color">
+        <a href="comprarTicket.php?idEvento=<?=$evento->getIdEvento()?>" class="btn button-color">
           <span>Comprar</span>
         </a>
       </div>

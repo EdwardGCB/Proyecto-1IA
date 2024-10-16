@@ -20,7 +20,7 @@ if(isset($_POST["insertar"])){
       if($cliente -> autenticarCorreo()){
         $cliente -> insertar();
         $_SESSION["id"] = $cliente -> getIdPersona();
-        header("Location: index.php");
+        header("Location: ../index.php");
       }else{
         $error = "El correo digitado ya existe";
       }

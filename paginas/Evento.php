@@ -1,4 +1,5 @@
 <?php
+session_start();
 require('../logica/Evento.php');
 require('../logica/EventoZona.php');
 require('../logica/Zona.php');

@@ -25,13 +25,13 @@ class ClienteDAO{
   }
 
   public function autenticarCorreo(){
-    return "select idCliente
+    return "select idCliente, nombre, apellidos, telefono, cc
             from Cliente
             where email = '" . $this -> correo . "'";
   }
 
   public function consultarPorId(){
-    return "select cc, nombre, apellidos, telefono, email, password
+    return "select cc, nombre, apellidos, telefono, email
             from Cliente
             where idCliente = '". $this -> idPersona ."'";
   }

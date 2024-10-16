@@ -49,6 +49,12 @@ class Cliente extends Persona{
       $conexion -> cerrarConexion();
       return true;
     }else{
+      $registro = $conexion->siguienteRegistro();
+      $this -> idPersona = $registro[0];
+      $this -> nombre = $registro[1];
+      $this -> apellido = $registro[2];
+      $this -> telefono = $registro[3];
+      $this -> cc_nit = $registro[4];
       $conexion -> cerrarConexion();
       return false;
     }
@@ -70,11 +76,19 @@ class Cliente extends Persona{
     $conexion -> abrirConexion();
     $clienteDAO = new ClienteDAO($this->idPersona);
     $conexion -> ejecutarConsulta($clienteDAO -> consultarPorId());
-    $registro = $conexion -> siguienteRegistro();
-    $this -> cc_nit = $registro[0];
-    $this -> nombre = $registro[1];
-    $this -> apellido = $registro[2];
-    $this -> telefono = $registro[3];
+    if($conexion ->numeroFilas()==0){
+      $conexion -> cerrarConexion();
+      return false;
+    }else{
+      $registro = $conexion -> siguienteRegistro();
+      $this -> cc_nit = $registro[0];
+      $this -> nombre = $registro[1];
+      $this -> apellido = $registro[2];
+      $this -> telefono = $registro[3];
+      $this -> correo = $registro[4];
+      $conexion -> cerrarConexion();
+      return true;
+    }
   }
 
 }

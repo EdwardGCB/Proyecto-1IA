@@ -10,12 +10,15 @@ if(isset($_POST["autenticar"])){
   $clave = md5($_POST["password"]);
     $proveedor = new Proveedor(null, null, null, $correo, null,$clave);
     if($proveedor -> autenticar()){
+			session_start();
+
         $_SESSION["id"] = $proveedor -> getIdPersona();
         header("Location: sesionProveedor.php");     
     }else{
 			$cliente = new Cliente(null,null,null, $correo, null, $clave);
 			if($cliente -> autenticar()){
-				
+				session_start();
+
 				$_SESSION["id"] = $cliente -> getIdPersona();
         header("Location: ../index.php");
 			}else{
