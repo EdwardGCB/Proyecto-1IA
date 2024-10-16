@@ -1,140 +1,117 @@
 <?php
 require("logica/Categoria.php");
 require("logica/Ciudad.php");
+require("logica/Evento.php");
+require("logica/Persona.php");
+require("logica/Proveedor.php");
 include("componentes/encabezado.php");
 ?>
-        .p-3 {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin: 6px;
-        }
-        .col-md-4 {
-            justify-content: center;
-            align-items: center;
-        }
+.p-3 {
+display: flex;
+justify-content: center;
+align-items: center;
+margin: 6px;
+}
+.col-md-4 {
+justify-content: center;
+align-items: center;
+}
 
-        .col-lg-4 .p-3{
-            margin: 5px;
-            width: 25vw;
-            height: 31vw;
-        }
+.col-lg-4 .p-3{
+margin: 5px;
+width: 25vw;
+height: 31vw;
+}
+.card-custom {
+margin-top: 20px;
+}
 
-        .square {
-            margin: 10px
-            width: 15vw;
-            height: 15vw;
-        }
+.card .row{
+padding: 10px;
+}
 
-        .card .row{
-           padding: 10px; 
-        }
-    </style>
+.square {
+width: 19vw; 
+height: 19vw; 
+}
+</style>
 </head>
 
 <body>
-    <?php include("componentes/navcliente.php")?>
-    <br>
-    <div class="container">
-        <div class="row mb-3">
-            <div class="col">
-            <h4>Destacados</h4>
-                <div class="container">
-                    <div class="row">
-                        <!-- columna izquierda -->
-                        <div class="col-md-4">
-                            <div class="col-lg-4">
-                                <div class="p-3 border bg-light ">Principal Element</div>
-                            </div>
-                        </div>
-                        <!-- columna derecha -->
-                        <div class="col-md-8">
-                            <div class="row">
-                                <div class="col-4">
-                                    <div class="p-3 border bg-light square">1</div>
-                                </div>
-                                <div class="col-4">
-                                    <div class="p-3 border bg-light square">2</div>
-                                </div>
-                                <div class="col-4">
-                                    <div class="p-3 border bg-light square">3</div>
-                                </div>
-                                <div class="col-4">
-                                    <div class="p-3 border bg-light square">4</div>
-                                </div>
-                                <div class="col-4">
-                                    <div class="p-3 border bg-light square">5</div>
-                                </div>
-                                <div class="col-4">
-                                    <div class="p-3 border bg-light square">6</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+  <?php include("componentes/navcliente.php")?>
+  <br>
+  <?php
+    $evento = new Evento();
+    $eventos = $evento->consultaGeneral(null, 0, 15);
+    $hoy = date('y-m-d');
+    $evento = $evento->eventoCercano($hoy);
+  ?>
+  <div class="container mt-4">
+    <div class="row">
+      <!-- Columna izquierda -->
+      <div class="col-md-5">
+        <div class="card">
+          <img src="https://via.placeholder.com/750" class="card-img-top" alt="Imagen de ejemplo">
+          <div class="card-body">
+            <h5 class="card-title"><?=$evento->getNombre()?></h5>
+            <p class="card-text">Sitio: <?=$evento->getCiudad()->getNombre()." ".$evento->getSitio()?></p>
+            <p class="card-text">Fecha: <?=$evento->getFechaEvento()." / ".$evento->getHoraEvento()?></p>
+            <p class="card-text">EdadMinima: <?=$evento->getEdadMinima()?></p>
+            <p class="card-text">Categoria: <?=$evento->getCategoria()->getNombre()?></p>
+            <a href="paginas/eventoInfo.php?idEvento=<?= $evento->getIdEvento()?>" class="btn btn-primary">Ver más</a>
+          </div>
         </div>
-    </div>
-    <!-- Events -->
-    <div class="container">
-        <div class="row mb-3">
-            <div class="col">
-                <h4>Eventos</h4>
-                <div class="container">
-                    <div id="carouselExample" class="carousel slide" data-bs-ride="carousel">
-                        <div class="carousel-inner">
-                            <!-- First slide -->
-                            <div class="carousel-item active">
-                                <div class="container">
-                                    <div class="row">
-                                        <div class="col-3">
-                                            <a href="#"><div class="p-3 border bg-light square">Element 1</div></a>
-                                        </div>
-                                        <div class="col-3">
-                                            <a href="#"><div class="p-3 border bg-light square">Element 2</div></a>
-                                        </div>
-                                        <div class="col-3">
-                                            <a href="#"><div class="p-3 border bg-light square">Element 3</div></a>
-                                        </div>
-                                        <div class="col-3">
-                                            <a href="#"><div class="p-3 border bg-light square">Element 4</div></a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- Second slide -->
-                            <div class="carousel-item">
-                                <div class="container">
-                                    <div class="row">
-                                        <div class="col-3">
-                                            <a href="#"><div class="p-3 border bg-light square">Element 5</div></a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
-                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                            <span class="visually-hidden">Previous</span>
-                        </button>
-                        <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
-                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                            <span class="visually-hidden">Next</span>
-                        </button>
-                    </div>
-                </div>
+      </div>
+      <!-- Columna derecha -->
+      <div class="col-md-7">
+        <div class="row">
+          <?php
+          $counter = 0;
+          foreach($eventos as $eventoActual){
+              if ($counter >= 6) break;
+              if ($counter % 3 === 0 && $counter > 0) echo '</div><div class="row">';
+              if($eventoActual->getIdEvento() == $evento->getIdEvento()){
+        ?>
+
+          <?php
+              }else{
+        ?>
+          <div class="col-md-4 card-custom">
+            <div class="card">
+              <img src="https://via.placeholder.com/150" class="card-img-top" alt="Imagen de ejemplo">
+              <div class="card-body">
+                <h6 class="card-title"><?= $eventoActual->getNombre()?></h6>
+                <p class="card-text">Sitio: <?=$evento->getSitio()?></p>
+                <p class="card-text">Fecha: <?=$eventoActual->getFechaEvento()." / ".$evento->getHoraEvento()?></p>
+                <a href="paginas/eventoInfo.php?idEvento=<?= $eventoActual->getIdEvento()?>" class="btn btn-primary">Ver
+                  más</a>
+              </div>
             </div>
+          </div>
+          <?php
+              $counter++;
+              }
+          }
+          ?>
         </div>
+      </div>
     </div>
-    <!-- Cities -->
-    <div class="container">
+  </div>
+  <!-- Events -->
+  <div class="container">
     <div class="row mb-3">
-        <div class="col">
-            <h4>Ciudades</h4>
-            <div class="container">
-                <div id="carouselCiudades" class="carousel slide" data-bs-ride="carousel">
-                    <div class="carousel-inner">
-                        <?php
+
+    </div>
+  </div>
+  <!-- Cities -->
+  <div class="container">
+    <div class="row mb-3">
+      <div class="col">
+        <h4>Ciudades</h4>
+        <div class="container">
+          <div id="carouselCiudades" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+              <?php
                         $ciudad = new Ciudad();
                         $ciudades = $ciudad->consultarTodos();
                         $totalCiudades = count($ciudades);
@@ -150,42 +127,41 @@ include("componentes/encabezado.php");
                                 echo "<div class='container'><div class='row'>";
                                 $slideIndex++;
                             }
-
                             // Output the city as a square element
                             echo "<div class='col-3'>";
                             echo "<a href='paginas/ciudadEvento.php?idCiudad=".$ciudadActual->getIdCiudad()."'><div class='p-3 border bg-light square'>";
                             echo $ciudadActual->getNombre();
                             echo "</div></a>";
                             echo "</div>";
-
                             // Close the slide if we've added 4 cities
                             if (($index + 1) % $ciudadesPorSlide == 0 || ($index + 1) == $totalCiudades) {
                                 echo "</div></div></div>";
                             }
                         }
+                        
                         ?>
-                    </div>
-                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
-                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Previous</span>
-                    </button>
-                    <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
-                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Next</span>
-                    </button>
-                </div>
             </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Next</span>
+            </button>
+          </div>
         </div>
+      </div>
     </div>
-</div>
+  </div>
 
-<div class="container">
+  <div class="container">
     <div class="row mb-3">
-        <div class="col">
-            <h4>Categorías</h4>
-            <div class="container">
-                <div class="row">
-                    <?php
+      <div class="col">
+        <h4>Categorías</h4>
+        <div class="container">
+          <div class="row">
+            <?php
                     $categoria = new Categoria();
                     $categorias = $categoria->consultarCategorias(); // Obtén todas las categorías
                     $totalCategorias = count($categorias);
@@ -204,13 +180,14 @@ include("componentes/encabezado.php");
                         }
                     }
                     ?>
-                </div>
-            </div>
+          </div>
         </div>
+      </div>
     </div>
-</div>
+  </div>
 
 
 </body>
-    <?php include("componentes/footer.php")?>
+<?php include("componentes/footer.php")?>
+
 </html>

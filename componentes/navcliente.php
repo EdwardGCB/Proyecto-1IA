@@ -1,21 +1,37 @@
+<?php
+$categoria = new Categoria();
+$categorias = $categoria->consultarCategorias();
+?>
+
 <div class="container-fluid full-page">
   <nav class="navbar navbar-expand-lg">
     <div class="container-fluid">
       <a class="navbar-brand" href="#">
-        <img src="/docs/5.3/assets/brand/bootstrap-logo.svg" alt="Logo" width="30" height="24" class="d-inline-block align-text-top">
+        <img src="/docs/5.3/assets/brand/bootstrap-logo.svg" alt="Logo" width="30" height="24"
+          class="d-inline-block align-text-top">
         Bootstrap
       </a>
       <div class="collapse navbar-collapse position-absolute top-50 start-50 translate-middle" id="navbarNav">
         <ul class="navbar-nav">
           <li class="nav-item">
-            <a class="nav-link" aria-current="page" href="#">Home</a>
+            <a class="nav-link" aria-current="page" href="/xampp/Proyecto-1IA/index.php">Inicio</a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Features</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Pricing</a>
-          </li>
+
+          <?php
+          foreach ($categorias as $categoriaActual) {
+            $nombre = $categoriaActual->getNombre();
+            $pos = strpos($nombre, ' ');
+            if ($pos !== false) {
+                $substring = substr($nombre, 0, $pos);
+            } else {
+                $substring = $nombre; // In case there's no space, show the whole string
+            }
+            echo "
+            <li class='nav-item'>
+              <a class='nav-link' href='/xampp/Proyecto-1IA/paginas/CategoriaEvento.php?idCategoria=".$categoriaActual->getIdCategoria()."'>".$substring."</a>
+            </li>";
+   
+          }?>
         </ul>
       </div>
       <a href="paginas/iniciarSesion.php" class="btn bg-white text-muted ">

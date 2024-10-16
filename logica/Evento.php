@@ -1,6 +1,6 @@
 <?php
-require_once('../persistencia/Conexion.php');
-require('../persistencia/EventoDAO.php');
+require_once(__DIR__.'/../persistencia/Conexion.php');
+require(__DIR__.'/../persistencia/EventoDAO.php');
 class Evento{
   private $idEvento;
   private $sitio;
@@ -115,6 +115,49 @@ class Evento{
     $this->ciudad = $ciudad;
     $this->categoria = $categoria;
   }
+
+  public function consultaGeneral($value=null, $inicio=null, $datos=null) {
+    $eventos = array();
+    $ciudades = array();
+    $categorias = array();
+    $proveedores = array();
+    $conexion = new Conexion();
+    $conexion->abrirConexion();
+    $eventoDAO = new EventoDAO();
+    $conexion->ejecutarConsulta($eventoDAO->consultaGeneral($value, $inicio, $datos));
+    while ($registro = $conexion->siguienteRegistro()) {
+      $categoria=null;
+      $ciudad=null;
+      $proveedor=null;
+      if(array_key_exists($registro[8],$proveedores)){
+        $proveedor = $proveedores[$registro[8]];
+      }else{
+        $proveedor = new Proveedor($registro[8]);
+        $proveedor -> consultarPorId();
+        $proveedores[$registro[8]] = $proveedor;
+      }
+      if(array_key_exists($registro[9],$ciudades)){
+        $ciudad = $ciudades[$registro[9]];
+      }else{
+        $ciudad = new Ciudad($registro[9]);
+        $ciudad -> consultarPorId();
+        $ciudades[$registro[9]] = $ciudad;
+      }
+      if(array_key_exists($registro[10],$categorias)){
+        $categoria = $categorias[$registro[10]];
+      }else{
+        $categoria = new Categoria($registro[10]);
+        $categoria -> consultarPorId();
+        $categorias[$registro[10]] = $categoria;
+      }
+      
+      $evento = new Evento($registro[0], $registro[1], $registro[2], $registro[3], $registro[4], $registro[5],$registro[6], $registro[7], $proveedor, $ciudad, $categoria);
+        array_push($eventos, $evento);
+    }
+    $conexion->cerrarConexion();
+    return $eventos;
+  }
+
   public function consultarPorProveedor($value = null, $inicio=null, $datos=null) {
     $eventos = array();
     $ciudades = array();
@@ -273,7 +316,7 @@ class Evento{
     $conexion = new Conexion();
     $conexion->abrirConexion();
     $this->ciudad->consultarPorId();
-    $eventoDAO = new EventoDAO(null, null, null, null, null, null, null, null, null,$this->categoria);
+    $eventoDAO = new EventoDAO(null, null, null, null, null, null, null, null, null,$this->ciudad);
     $conexion -> ejecutarConsulta($eventoDAO->consultarPorCiudad());
     while ($registro = $conexion->siguienteRegistro()) {
       $categoria=null;
@@ -286,7 +329,7 @@ class Evento{
       }
       $proveedor = new Proveedor($registro[8]);
       $proveedor -> consultarPorId();
-      $evento = new Evento($registro[0],$registro[1],$registro[2],$registro[3],$registro[4],$registro[5],$registro[6],$registro[7],$proveedor, $$this->ciudad, $categoria);
+      $evento = new Evento($registro[0],$registro[1],$registro[2],$registro[3],$registro[4],$registro[5],$registro[6],$registro[7],$proveedor, $this->ciudad, $categoria,);
       array_push($eventos, $evento);
     }
     $conexion->cerrarConexion();

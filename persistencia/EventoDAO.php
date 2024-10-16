@@ -26,6 +26,14 @@ class EventoDAO{
     $this->categoria = $categoria;
   }
 
+  public function consultaGeneral($value = null, $inicio = null, $datos = null) {
+    return "select idEvento, sitio, flayer, logo, edadMinima, nombre, fechaEvento, horaEvento, Proveedor_idProveedor,ciudad_idCiudad, Categoria_idCategoria
+            from Evento
+            " . (($value != null) ? "where nombre='" . $value . "'" : "") . "
+            limit $inicio, $datos";
+}
+
+
   public function consultarPorProveedor($inicio=null, $datos=null){
     return "
     select idEvento, nombre, fechaEvento, horaEvento, ciudad_idCiudad, Categoria_idCategoria
@@ -77,13 +85,18 @@ class EventoDAO{
   }
 
   public function eventoCercano($date){
+    $whereClause = "";
+    if ($this->proveedor != null) {
+        $whereClause = "Proveedor_idProveedor = '". $this->proveedor->getIdPersona() ."' and ";
+    }
     return "
-      select idEvento, sitio, edadMinima, nombre, fechaEvento, horaEvento, ciudad_idCiudad, Categoria_idCategoria
-      from Evento
-      where Proveedor_idProveedor = '". $this->proveedor->getIdPersona(). "' and fechaEvento >= '". $date. "'
-      order by fechaEvento asc
-      limit 1";
+        select idEvento, sitio, edadMinima, nombre, fechaEvento, horaEvento, ciudad_idCiudad, Categoria_idCategoria
+        from Evento
+        where ". $whereClause ."fechaEvento >= '". $date ."'
+        order by fechaEvento asc
+        limit 1";
   }
+
 
   public function consultarPorCategoria(){
     return "
@@ -100,5 +113,6 @@ class EventoDAO{
     where ciudad_idCiudad = '". $this->ciudad->getIdCiudad()."'
     order by nombre asc";
   }
+
 }
 ?>

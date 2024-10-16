@@ -70,7 +70,7 @@ include('../componentes/Ticket.php');
             <p>Proveedor: <?php echo $eventoActual->getProveedor()->getNombre(); ?></p>
             <p>Ciudad: <?php echo $eventoActual->getCiudad()->getNombre(); ?></p>
             <p>
-            <a href="eventoInfo.php=<?php echo $eventoActual->getIdEvento();?>">
+            <a href="eventoInfo.php?idEvento=<?php echo $eventoActual->getIdEvento();?>">
             <span class="material-symbols-rounded">
                 more_horiz
             </span>

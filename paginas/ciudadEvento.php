@@ -17,7 +17,7 @@
     <div class="row">
       <?php
             // Verificar si se ha pasado un idCategoria como parámetro en la URL
-            if (isset($_GET['idCiudad'])) {
+        if (isset($_GET['idCiudad'])) {
                 $idCiudad= $_GET['idCiudad'];
                 // Instanciar la clase Categoria y llamar al método para consultar eventos por categoría
                 $ciudad = new Ciudad($idCiudad);
@@ -77,7 +77,7 @@
       <?php
               }
           } else {
-              echo "<p>No se encontraron eventos en esta categoría.</p>";
+              echo "<p>No se encontraron eventos en esta ciudad.</p>";
           }
       } else {
           echo "<p>No se ha seleccionado ninguna categoría.</p>";
