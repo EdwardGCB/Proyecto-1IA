@@ -210,17 +210,48 @@ class Evento{
   public function consultaIndividual() {
     $conexion = new Conexion();
     $conexion->abrirConexion();
-    $eventoDAO = new EventoDAO($this->idEvento);
-    $conexion -> ejecutarConsulta($eventoDAO->consultaIndividual());
-    if($conexion -> numeroFilas() == 0){
-      $conexion -> cerrarConexion();
-      return false;
-    }else{
-      /*seteo los datos del evento */
-      $conexion -> cerrarConexion();
-      return true;
+    $eventoDAO = new EventoDAO($this->idEvento); 
+    $conexion->ejecutarConsulta($eventoDAO->consultaIndividual());
+    
+    if ($conexion->numeroFilas() == 0) {
+        $conexion->cerrarConexion();
+        return null;  
+    } else {
+        $registro = $conexion->siguienteRegistro(); 
+        
+        // Crear los objetos relacionados: Proveedor, Ciudad y Categoria
+        $proveedor = new Proveedor($registro[8]);
+        $proveedor->consultarPorId();
+        
+        $ciudad = new Ciudad($registro[9]);
+        $ciudad->consultarPorId();
+        
+        $categoria = new Categoria($registro[10]);
+        $categoria->consultarPorId();
+        
+        // Crear el objeto Evento con los datos obtenidos
+        $evento = new Evento(
+            $registro[0],  // idEvento
+            $registro[1],  // sitio
+            $registro[2],  // flayer
+            $registro[3],  // logo
+            $registro[4],  // edadMinima
+            $registro[5],  // nombre
+            $registro[6],  // fechaEvento
+            $registro[7],  // horaEvento
+            $proveedor,    // objeto Proveedor
+            $ciudad,       // objeto Ciudad
+            $categoria     // objeto Categoria
+        );
+
+        $conexion->cerrarConexion();
+
+        // Retornar el objeto evento
+        return $evento;
     }
-  }
+}
+
+
 
   public function consultaPorID(){
     $conexion = new Conexion();

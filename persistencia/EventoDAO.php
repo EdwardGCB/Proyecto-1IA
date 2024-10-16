@@ -27,7 +27,7 @@ class EventoDAO{
   }
 
   public function consultaGeneral($value = null, $inicio = null, $datos = null) {
-    return "select idEvento, sitio, flayer, logo, edadMinima, nombre, fechaEvento, horaEvento, Proveedor_idProveedor,ciudad_idCiudad, Categoria_idCategoria
+    return "select idEvento, sitio, flayer, logo, edadMinima, nombre, fechaEvento, horaEvento, Proveedor,ciudad_idCiudad, Categoria_idCategoria
             from Evento
             " . (($value != null) ? "where nombre='" . $value . "'" : "") . "
             limit $inicio, $datos";
@@ -38,7 +38,7 @@ class EventoDAO{
     return "
     select idEvento, nombre, fechaEvento, horaEvento, ciudad_idCiudad, Categoria_idCategoria
     from Evento
-    where Proveedor_idProveedor = '" .$this->proveedor->getIdPersona(). "'
+    where Proveedor = '" .$this->proveedor->getIdPersona(). "'
     limit $inicio,$datos";
   }
 
@@ -46,7 +46,7 @@ class EventoDAO{
     return "
     select idEvento, nombre, fechaEvento, horaEvento, ciudad_idCiudad, Categoria_idCategoria
     from Evento
-    where Proveedor_idProveedor = '" .$this->proveedor->getIdPersona(). "' and nombre= '". $value ."'
+    where Proveedor = '" .$this->proveedor->getIdPersona(). "' and nombre= '". $value ."'
     limit $inicio,$datos
     ";
   }
@@ -68,26 +68,26 @@ class EventoDAO{
     return "
     select sitio, flayer, logo, edadMinima, nombre, fechaEvento, horaEvento, ciudad_idciudad, Categoria_idCategoria
     from Evento
-    where idEvento = '". $this->idEvento."' and Proveedor_idProveedor = '". $this->proveedor->getIdPersona()."'";
+    where idEvento = '". $this->idEvento."' and Proveedor = '". $this->proveedor->getIdPersona()."'";
   }
 
   public function numeroEventosProveedor(){
     return "select idEvento
     from Evento
-    where Proveedor_idProveedor = '".$this->proveedor->getIdPersona()."'";
+    where Proveedor = '".$this->proveedor->getIdPersona()."'";
   }
 
   public function actualizar(){
     return "
       update Evento
       set sitio = '". $this->sitio. "', flayer = '". $this->flayer. "', logo = '". $this->logo. "', edadMinima = '". $this->edadMinima. "', nombre = '". $this->nombre. "', fechaEvento = '". $this->fechaEvento. "', horaEvento = '". $this->horaEvento. "', ciudad_idCiudad = '". $this->ciudad->getIdCiudad(). "', Categoria_idCategoria = '". $this->categoria->getIdCategoria(). "'
-      where idEvento = '". $this->idEvento. "' and Proveedor_idProveedor = '". $this->proveedor->getIdPersona(). "'";
+      where idEvento = '". $this->idEvento. "' and Proveedor = '". $this->proveedor->getIdPersona(). "'";
   }
 
   public function eventoCercano($date){
     $whereClause = "";
     if ($this->proveedor != null) {
-        $whereClause = "Proveedor_idProveedor = '". $this->proveedor->getIdPersona() ."' and ";
+        $whereClause = "Proveedor = '". $this->proveedor->getIdPersona() ."' and ";
     }
     return "
         select idEvento, sitio, edadMinima, nombre, fechaEvento, horaEvento, ciudad_idCiudad, Categoria_idCategoria
@@ -100,7 +100,7 @@ class EventoDAO{
 
   public function consultarPorCategoria(){
     return "
-    select idEvento, sitio, flayer, logo, edadMinima, nombre, fechaEvento, horaEvento, Proveedor_idProveedor, ciudad_idCiudad
+    select idEvento, sitio, flayer, logo, edadMinima, nombre, fechaEvento, horaEvento, Proveedor, ciudad_idCiudad
     from Evento
     where Categoria_idCategoria = '". $this->categoria->getIdCategoria()."'
     order by nombre asc";
@@ -108,7 +108,7 @@ class EventoDAO{
 
   public function consultarPorCiudad(){
     return "
-    select idEvento, sitio, flayer, logo, edadMinima, nombre, fechaEvento, horaEvento, Proveedor_idProveedor, Categoria_idCategoria
+    select idEvento, sitio, flayer, logo, edadMinima, nombre, fechaEvento, horaEvento, Proveedor, Categoria_idCategoria
     from Evento
     where ciudad_idCiudad = '". $this->ciudad->getIdCiudad()."'
     order by nombre asc";
