@@ -44,20 +44,14 @@ if(isset($_POST["agregar"])){
   $correosDuplicados = array();
 }
 if(isset($_POST["generarTicket"])){
+  echo "GenerandoTicket";
   $numeros = $_POST['numero'];
   $correos = $_POST['correo'];
-  $precios = $_POST['valorTicket'];
-  foreach($eventosZona as $eventoZonaActual){
-    $idZona = $eventoZonaActual->getZona()->getIdZona();
-    for($i=0;$i<$numeros[$idZona];$i++){
-      
-      $clienteTemp = new Cliente(null,null,null,$correos[$idZona][$i]);
-      if($clienteTemp->autenticarCorreo()){
-        //$subtotal = $precios[$clienteTemp->getIdPersona()];
-        //$ticket = new Ticket(null,$subtotal,null,$clienteTemp,null,$eventosZonaActual);
-        //echo $ticket->getValor();
-        //echo $ticket->getCliente()->getNombre();
-        //echo $ticket->getEventoZona()->getEvento()->getIdEvento();
+  foreach($eventosZona as $eventoZonaActual2){
+    $idZona = $eventoZonaActual2->getZona()->getIdZona();
+    if(isset($numeros[$idZona])){
+      for ($i=0; $i < $numeros[$idZona] ; $i++) { 
+        echo "<br>".htmlspecialchars($correos[$idZona][$i]);
       }
     }
   }
@@ -210,19 +204,21 @@ font-size: 16px;
                                     </div>
                                 </td>
                                 <td>
-                                    <?php if (isset($_POST["agregar"])) {
+                                    <?php if (isset($_POST["agregar"]) || isset($correos)) {
+                                      $tickets = array();
                                         if (array_key_exists($idZona, $correos)) {
                                             $clienteTemp = new Cliente(null, null, null, $correos[$idZona][$i]);
                                             if (!$clienteTemp->autenticarCorreo()) {
                                                 $cantidadCorreos++;
-                                                echo "<div class='alert alert-success' role='alert'>" . htmlspecialchars($clienteTemp->getCorreo()) . "</div>";
-                                                echo "<input type='hidden' name='valorTicket[" . $clienteTemp->getIdPersona() . "]' value='" . number_format($eventoZonaActual->getValor(), 2) . "'>";
+                                                $ticket = new Ticket(null, null, null, $clienteTemp, null, $eventoZonaActual);
+                                                echo "
+                                                <div class='alert alert-success' role='alert'>" . htmlspecialchars($clienteTemp->getCorreo()) . "</div></td>";
+                                                echo "<td>" . number_format($eventoZonaActual->getValor(), 2) . "</td>";
                                             } else {
-                                                echo "<div class='alert alert-danger' role='alert'>Correo no encontrado</div><td>$0</td>";
+                                                echo "<div class='alert alert-danger' role='alert'>Correo no encontrado</div></td><td>$0</td>";
                                             }
                                         }
                                     } ?>
-                                </td>
                                 <td></td>
                             </tr>
                         <?php }

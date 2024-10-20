@@ -1,4 +1,5 @@
 <?php
+session_start();
 require('../logica/Evento.php');
 require('../logica/Persona.php');
 require('../logica/Proveedor.php');

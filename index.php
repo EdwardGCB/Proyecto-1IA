@@ -1,7 +1,7 @@
 <?php
 session_start();
 if(isset($_SESSION["id"])){
-    echo $_SESSION["id"];
+  
 }
 require("logica/Categoria.php");
 require("logica/Ciudad.php");

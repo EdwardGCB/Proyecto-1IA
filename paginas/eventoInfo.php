@@ -1,6 +1,5 @@
 <?php
 session_start();
-echo $_SESSION["id"];
 if(!isset($_GET["idEvento"])){
   header("Location: ../index.php");
 }
