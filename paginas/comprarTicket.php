@@ -11,6 +11,7 @@ require("../logica/Zona.php");
 require("../logica/Cliente.php");
 require("../logica/Asiento.php");
 require("../logica/Ticket.php");
+require("../logica/Factura.php");
 if(!isset($_SESSION["id"])){
   header("Location: iniciarSesion.php");
 }
@@ -34,27 +35,45 @@ if (!$evento->consultaIndividual()) {
 $total=0;
 $eventoZona=new EventoZona(null,null,$evento);
 $eventosZona = $eventoZona->consultarPorEvento();
+$cantidadCorreos = 0;
 if(isset($_POST["consultar"])){
   $numeros = $_POST['numero'];
-  $cantidadAsientos = count($numeros);
 }
 if(isset($_POST["agregar"])){
   $numeros = $_POST['numero'];
   $correos = $_POST['correo'];
-  $correosDuplicados = array();
+  $correosRepetidos=array();
 }
 if(isset($_POST["generarTicket"])){
-  echo "GenerandoTicket";
+  $iva = 0.19;
+  $tickets =array();
   $numeros = $_POST['numero'];
   $correos = $_POST['correo'];
-  foreach($eventosZona as $eventoZonaActual2){
-    $idZona = $eventoZonaActual2->getZona()->getIdZona();
-    if(isset($numeros[$idZona])){
-      for ($i=0; $i < $numeros[$idZona] ; $i++) { 
-        echo "<br>".htmlspecialchars($correos[$idZona][$i]);
+  foreach ($eventosZona as $eventoZona2) {
+    $idZona = $eventoZona2->getZona()->getIdZona();
+    for($i=0; $i< $numeros[$idZona]; $i++) {
+      if($correos[$idZona][$i]==""){
+
+      }else{
+        $clienteTemp = new Cliente(null,null,null,$correos[$idZona][$i]);
+        $clienteTemp->autenticarCorreo();
+        $asiento = new Asiento(null, null, null,null, $eventoZona2->getZona());
+        $asiento->consultarAsiento(1, $evento->getIdEvento());
+        $ticket = new Ticket(null,$eventoZona2->getValor(),$asiento, $clienteTemp,null,$eventoZona2);
+        $total += $eventoZona2->getValor();
+        $cantidadCorreos ++;
+        array_push($tickets, $ticket);
       }
     }
   }
+  $factura = new Factura(null, $total, $cantidadCorreos, $iva, $cliente);
+  $factura->generarFactura();
+  echo $factura->getIdFactura();
+  foreach($tickets as $ticketActual){
+    $ticketActual->setFactura($factura);
+    $ticketActual->generarTicket();
+  }
+  header("Location: ../Factura.php?idFactura=".$factura->getIdFactura()."");
 }
 include("../componentes/encabezado.php");
 ?>
@@ -164,78 +183,108 @@ font-size: 16px;
     <section class="seat-reservation">
       <h2>Reserva de asientos automáticos</h2>
       <form method="post" action="comprarTicket.php?idEvento=<?=$evento->getIdEvento()?>">
-      <table class="table table-striped">
-        <thead>
+        <table class="table table-striped">
+          <thead>
             <tr>
-                <th>Categoría de asiento</th>
-                <th>Preferencia (*)</th>
-                <th>Cantidad</th>
-                <th>Precio unitario</th>
-                <th>Accion</th>
+              <th>Categoría de asiento</th>
+              <th>Preferencia (*)</th>
+              <th>Cantidad</th>
+              <th>Precio unitario</th>
+              <th>Disponibilidad</th>
+              <th>Accion</th>
             </tr>
-        </thead>
-        <tbody>
-            <?php foreach ($eventosZona as $eventoZonaActual) {
+          </thead>
+          <tbody>
+            <?php
+            foreach ($eventosZona as $eventoZonaActual) {
                 $idZona = $eventoZonaActual->getZona()->getIdZona();
                 $asiento = new Asiento(null, null, null, null, $eventoZonaActual->getZona());
-                $asientosZona = true; // $asientosZona = $asiento->consultarAsientosZona();
-                ?>
-                <tr>
-                    <td><span style="color: <?= $eventoZonaActual->getZona()->getColor(); ?>;">● <?= $eventoZonaActual->getZona()->getNombre() ?></span> <?= isset($asientosZona) ? "" : "agotado" ?></td>
-                    <td>Automático</td>
+                $cantAsientos = $asiento->asientosDisponibles($evento);
+                echo $cantAsientos;
+            ?>
+            <tr>
+              <td><span style="color: <?= $eventoZonaActual->getZona()->getColor(); ?>;">●
+                  <?= $eventoZonaActual->getZona()->getNombre() ?></span> <?= ($cantAsientos!=0) ? "" : "agotado" ?>
+              </td>
+              <td>Automático</td>
+              <td>
+                <input <?= ($cantAsientos!=0) ? "" : "for='disabledTextInput'" ?> class="form-control" type="number"
+                  name="numero[<?= $idZona ?>]" min="0" max="10"
+                  value="<?= isset($numeros[$idZona]) ? htmlspecialchars($numeros[$idZona]) : 0 ?>">
+                  <?php
+                  if(isset($numeros[$idZona]) && $numeros[$idZona] > $cantAsientos){
+                    echo "<div class='alert alert-danger' role='alert'>Cantidad no disponible</div></td><td>$0</td>";
+                  }
+                  ?>
+              </td>
+              <td>$<?= number_format($eventoZonaActual->getValor(), 2); ?></td>
+              <td><?= $cantAsientos; ?></td>
+              <td>
+                <button type="submit" name="consultar" class="btn btn-dark"
+                  <?= ($cantAsientos!=0) ? "" : "disabled" ?>>Consultar</button>
+              </td>
+            </tr>
+              <?php if (isset($_POST["consultar"]) || isset($numeros)) {      
+              if (array_key_exists($idZona, $numeros) && $numeros[$idZona] > 0) {
+                for ($i = 0; $i < $numeros[$idZona]; $i++) { ?>
+                  <tr>
+                    <td></td>
+                    <td></td>
                     <td>
-                        <input <?= isset($asientosZona) ? "" : "for='disabledTextInput'" ?> class="form-control" type="number" name="numero[<?= $idZona ?>]" min="0" max="10" value="<?= isset($numeros[$idZona]) ? htmlspecialchars($numeros[$idZona]) : 0 ?>">
+                      <div class="form-floating mb-3">
+                        <input type="email" name="correo[<?= $idZona ?>][<?= $i?>]" class="form-control" id="floatingInput"
+                          placeholder="name@example.com" value="<?php echo (isset($correos) && !in_array($correos[$idZona][$i], array_column($correosRepetidos, 'email')))? $correos[$idZona][$i]:"" ?>">
+                        <label for="floatingInput">Correo Usuario</label>
+                      </div>
                     </td>
-                    <td>$<?= number_format($eventoZonaActual->getValor(), 2); ?></td>
                     <td>
-                        <button type="submit" name="consultar" class="btn btn-dark" <?= isset($asientosZona) ? "" : "disabled" ?>>Consultar</button>
-                    </td>
-                </tr>
-                <?php if (isset($_POST["consultar"]) || isset($numeros)) {
-                    $cantidadCorreos = 0;
-                    if (array_key_exists($idZona, $numeros) && $numeros[$idZona] > 0) {
-                        for ($i = 0; $i < $numeros[$idZona]; $i++) { ?>
-                            <tr>
-                                <td></td>
-                                <td>
-                                    <div class="form-floating mb-3">
-                                        <input type="email" name="correo[<?= $idZona ?>][]" class="form-control" id="floatingInput" placeholder="name@example.com">
-                                        <label for="floatingInput">Correo Usuario</label>
-                                    </div>
-                                </td>
-                                <td>
-                                    <?php if (isset($_POST["agregar"]) || isset($correos)) {
-                                      $tickets = array();
-                                        if (array_key_exists($idZona, $correos)) {
-                                            $clienteTemp = new Cliente(null, null, null, $correos[$idZona][$i]);
-                                            if (!$clienteTemp->autenticarCorreo()) {
-                                                $cantidadCorreos++;
-                                                $ticket = new Ticket(null, null, null, $clienteTemp, null, $eventoZonaActual);
-                                                echo "
-                                                <div class='alert alert-success' role='alert'>" . htmlspecialchars($clienteTemp->getCorreo()) . "</div></td>";
-                                                echo "<td>" . number_format($eventoZonaActual->getValor(), 2) . "</td>";
-                                            } else {
-                                                echo "<div class='alert alert-danger' role='alert'>Correo no encontrado</div></td><td>$0</td>";
-                                            }
-                                        }
-                                    } ?>
-                                <td></td>
-                            </tr>
-                        <?php }
-                        $total += $eventoZonaActual->getValor() * $cantidadCorreos;
-                        echo "<tr>
-                            <td></td>
-                            <td></td>
-                            <td>SubTotal:</td>
-                            <td><input type='hidden' name='subTotal[$idZona]' value='" . ($eventoZonaActual->getValor() * $cantidadCorreos) . "'>$" . number_format(($eventoZonaActual->getValor() * $cantidadCorreos), 2) . "</td>
-                            <td><button type='submit' name='agregar' class='btn btn-success'>Agregar</button></td>
-                        </tr>";
-                    }
+                    <?php 
+                    if (isset($_POST["agregar"]) || isset($correos)) {
+                        if (array_key_exists($idZona, $correos)) {
+                          //Validacion de correo repetido
+                            if(in_array($correos[$idZona][$i], array_column($correosRepetidos, 'email'))){
+                                echo "<div class='alert alert-danger' role='alert'>Correo ya registrado</div></td><td>$0</td>";
+                            } else { 
+                                $clienteTemp = new Cliente(null, null, null, $correos[$idZona][$i]);
+                                if (!$clienteTemp->autenticarCorreo()) { 
+                                    $ticket = new Ticket(null,null,null,$clienteTemp, null, $eventoZonaActual);
+                                    //Validacion de correo con ticket 
+                                    if(!$ticket->consultarTicket()){
+                                        $correosRepetidos[] = ['email' => $clienteTemp->getCorreo()];
+                                        $cantidadCorreos++;
+                                        echo "<div class='alert alert-success' role='alert'>" . htmlspecialchars($clienteTemp->getCorreo()) . "</div></td>";
+                                        echo "<td>" . number_format($eventoZonaActual->getValor(), 2) . "</td>";
+                                    } else { 
+                                        echo "<div class='alert alert-danger' role='alert'>Correo ya cuenta con un ticket</div></td><td>$0</td>";
+                                    }
+                                } else { 
+                                    echo "<div class='alert alert-danger' role='alert'>Correo no encontrado</div></td><td>$0</td>";
+                                }
+                            }
+                        }
+                    } else {
+                        echo "</td><td></td>";
+                    
                   } ?>
-                  <?php } ?>
-              </tbody>
-          </table>
-                
+                  <?php
+                  }
+                $total += $eventoZonaActual->getValor() * $cantidadCorreos;
+                echo "
+                  <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td>SubTotal:</td>
+                    <td><input type='hidden' name='subTotal[$idZona]' value='" . ($eventoZonaActual->getValor() * $cantidadCorreos) . "'>$" . number_format(($eventoZonaActual->getValor() * $cantidadCorreos), 2) . "</td>
+                    <td><button type='submit' name='agregar' class='btn btn-success'>Agregar</button></td>
+                </tr>";
+              }
+            } ?>
+          <?php
+          } ?>
+          </tbody>
+        </table>
         <div class="row">
           <div class="col">
             <h3>Total</h3>
@@ -245,12 +294,11 @@ font-size: 16px;
           </div>
           <div class="col">
             <button type="submit" name="generarTicket" class="btn btn-warning">Pagar</button>
+            <input type="hidden" name="total" value="<?= $total ?>">
           </div>
         </div>
       </form>
     </section>
-
-
     <!-- Include the footer component -->
     <?php include("../componentes/footer.php"); ?>
 </body>

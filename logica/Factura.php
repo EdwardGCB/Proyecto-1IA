@@ -1,4 +1,6 @@
 <?php
+require_once(__DIR__.'/../persistencia/Conexion.php');
+require (__DIR__.'/../persistencia/FacturaDAO.php');
 class Factura{
   private $idFactura;
   private $precioTotal;
@@ -54,6 +56,15 @@ class Factura{
     $this -> cliente = $cliente;
   }
 
+  public function generarFactura(){
+    $conexion = new Conexion();
+    $conexion->abrirConexion();
+    $facturaDAO = new FacturaDAO(null, $this->precioTotal, $this->cantidadTotal, $this->iva, $this->cliente);
+    $conexion->ejecutarConsulta($facturaDAO->generarFactura());
+    $this->idFactura = $conexion->obtenerLlaveAutonumerica();
+    $conexion->cerrarConexion();
+  }
+  
 }
 
 ?>

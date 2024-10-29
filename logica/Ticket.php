@@ -1,4 +1,6 @@
 <?php
+require_once(__DIR__.'/../persistencia/Conexion.php');
+require (__DIR__.'/../persistencia/TicketDAO.php');
 class Ticket{
   private $idTicket;
   private $valor;
@@ -61,6 +63,30 @@ class Ticket{
     $this -> cliente = $cliente;
     $this -> factura = $factura;
     $this -> eventoZona = $eventoZona;
+  }
+
+  public function consultarTicket(){
+    $conexion = new Conexion();
+    $conexion->abrirConexion();
+    $ticketDAO = new TicketDAO(null, null, null, $this->cliente, null, $this->eventoZona);
+    $conexion->ejecutarConsulta($ticketDAO->consultarTicket());
+    if($conexion->numeroFilas()!=0){
+      $result = $conexion->siguienteRegistro();
+      $this->idTicket = $result[0];
+      $this->valor = $result[1];
+      //$this->asiento = $result[2];
+      return true;
+    }else{
+      return false;
+    }
+  }
+
+  public function generarTicket(){
+    $conexion = new Conexion();
+    $conexion->abrirConexion();
+    $ticketDAO = new TicketDAO(null, $this->valor, $this->asiento, $this->cliente, $this->factura, $this->eventoZona);
+    $conexion->ejecutarConsulta($ticketDAO->generarTicket());
+    $conexion->cerrarConexion();
   }
 }
 ?>

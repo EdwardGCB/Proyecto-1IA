@@ -14,5 +14,13 @@ class FacturaDAO{
     $this -> cliente = $cliente;
   }
 
+  public function generarFactura(){
+    return "
+    INSERT INTO factura (precioTotal, cantidadTotal, IVA, Cliente_idCliente)
+    VALUES('".$this->precioTotal."','".$this->cantidadTotal."','".$this->iva."','".$this->cliente->getIdPersona()."')
+    ";
+  }
+  
+
 }
 ?>

@@ -33,5 +33,38 @@ class AsientoDAO{
     ";
   }
 
+  public function asientosDisponibles($evento){
+    return "SELECT COUNT(a.idAsiento) AS asientos_disponibles
+            FROM 
+                Asiento a
+            JOIN 
+                EventoZona ez ON a.Zona_idZona = ez.Zona_idZona
+            LEFT JOIN 
+                Ticket t ON a.idAsiento = t.Asiento_idAsiento AND t.EventoZona_Evento_idEvento = ez.Evento_idEvento
+            WHERE 
+                ez.Evento_idEvento = '".$evento->getIdEvento()."'
+                AND ez.Zona_idZona = '".$this->zona->getIdZona()."'
+                AND t.idTicket IS NULL
+    ";
+  }
+
+  public function consultarAsiento($limite, $idEvento){
+    return "
+        SELECT a.idAsiento, a.columna, a.fila
+        FROM 
+            Asiento a
+        JOIN 
+            EventoZona ez ON a.Zona_idZona = ez.Zona_idZona
+        LEFT JOIN 
+            Ticket t ON a.idAsiento = t.Asiento_idAsiento 
+             AND t.EventoZona_Evento_idEvento = ez.Evento_idEvento
+        WHERE 
+        a.Zona_idZona = '" . $this->zona->getIdZona(). "' AND
+        ez.Evento_idEvento = '".$idEvento."' AND
+        t.idTicket IS NULL
+        LIMIT $limite
+    ";
+  }
+
 }
 ?>

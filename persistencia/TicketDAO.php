@@ -15,5 +15,23 @@ class TicketDAO{
     $this -> factura = $factura;
     $this -> eventoZona = $eventoZona;
   }
+
+  public function consultarTicket(){
+    return "
+    SELECT idTicket, valor, Factura_idFactura, Asiento_idAsiento 
+    FROM TICKET
+    WHERE Cliente_idCliente = '".$this->cliente->getIdPersona()."' and 
+    EventoZona_Evento_idEvento = '".$this->eventoZona->getEvento()->getIdEvento()."'
+    ";
+  }
+
+  public function generarTicket(){
+    return "
+    INSERT INTO ticket (valor, Factura_idFactura, Asiento_idAsiento, Cliente_idCliente, EventoZona_Evento_idEvento, EventoZona_Zona_idZona)
+    VALUES ('".$this->valor."', '".$this->factura->getIdFactura()."', 
+    '".$this->asiento->getIdAsiento()."', '".$this->cliente->getIdPersona()."', 
+    '".$this->eventoZona->getEvento()->getIdEvento()."', '".$this->eventoZona->getZona()->getIdZona()."')
+    ";
+  }
 }
 ?>

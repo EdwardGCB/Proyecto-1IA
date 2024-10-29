@@ -5,7 +5,6 @@ class Asiento{
   private $idAsiento;
   private $fila;
   private $columna;
-  private $estado;
   private $zona;
 
   public function getIdAsiento() {
@@ -18,10 +17,6 @@ class Asiento{
   
   public function getColumna() {
     return $this->columna;
-  }
-  
-  public function getEstado() {
-    return $this->estado;
   }
   
   public function getZona() {
@@ -40,10 +35,6 @@ class Asiento{
     $this->columna = $columna;
   }
   
-  public function setEstado($estado) {
-    $this->estado = $estado;
-  }
-  
   public function setZona($zona) {
     $this->zona = $zona;
   }
@@ -52,7 +43,6 @@ class Asiento{
     $this -> idAsiento = $idAsiento;
     $this -> fila = $fila;
     $this -> columna = $columna;
-    $this -> estado = $estado;
     $this -> zona = $zona;
   }
 
@@ -74,6 +64,29 @@ class Asiento{
     $columnas = $conexion->numeroFilas();
     $conexion->cerrarConexion();
     return $columnas;
+  }
+
+  public function asientosDisponibles($evento){
+    $conexion = new Conexion();
+    $conexion->abrirConexion();
+    $asientoDAO = new AsientoDAO(null,null,null,null,$this->zona);
+    $conexion->ejecutarConsulta($asientoDAO -> asientosDisponibles($evento));
+    $resultado = $conexion->siguienteRegistro();
+    $disponibles = $resultado[0];
+    $conexion->cerrarConexion();
+    return $disponibles;
+  }
+
+  public function consultarAsiento($limite, $idEvento){
+    $conexion = new Conexion();
+    $conexion->abrirConexion();
+    $asientoDAO = new AsientoDAO($this->idAsiento,null,null,null,$this->zona);
+    $conexion->ejecutarConsulta($asientoDAO -> consultarAsiento($limite, $idEvento));
+    $resultado = $conexion->siguienteRegistro();
+    $this->idAsiento = $resultado[0];
+    $this->fila = $resultado[1];
+    $this->columna = $resultado[2];
+    $conexion->cerrarConexion();
   }
 }
 ?>
