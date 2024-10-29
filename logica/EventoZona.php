@@ -88,5 +88,18 @@ class EventoZona{
     $conexion->ejecutarConsulta($eventoZonaDAO->insertar());
     $conexion->cerrarConexion();
   }
+  public function consultarExistencia(){
+    $conexion = new Conexion();
+    $conexion->abrirConexion();
+    $eventoZonaDAO =  new EventoZonaDAO(null,null,$this->evento,$this->zona);
+    $conexion->ejecutarConsulta($eventoZonaDAO -> consultarExistencia());
+    if($conexion->numeroFilas()==0){
+      return false;
+      $conexion->cerrarConexion();
+    }else{
+      return true;
+      $conexion->cerrarConexion();
+    }
+  }
 }
 ?>

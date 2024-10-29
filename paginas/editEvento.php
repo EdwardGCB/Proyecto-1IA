@@ -26,19 +26,25 @@ if(!$evento->consultaPorId()){
 if(isset($_POST["refresh"])){
   $zona->setIdZona($_POST["zona"]);
   $zona->consultarPorID();
-  $asiento = new Asiento(null,null,null,null,$zona);
+  $asiento = new Asiento(null,null,null,$zona);
+  if(!$asiento->existenciaEnZona()){
+    $asiento->generarAsientos();
+  }
   $filaAsientos = $asiento->consultarFilasZona();
   $columnasAsientos = $asiento->consultarColumnasZona();
 }
 
 if(isset($_POST["agregar"])){
   $zona->setIdZona($_POST["zona"]);
-  echo $zona->getIdZona();
   $zona->consultarPorID();
   $aforo= $_POST["aforo"];
   $valor= $_POST["valor"];
   $eventoZona = new EventoZona($valor,$aforo,$evento,$zona);
-  $eventoZona->insertar();
+  if(!$eventoZona->consultarExistencia()){
+    $eventoZona->insertar(); 
+  }else{
+
+  }
 }
 if(isset($_POST["guardar"])){
   $evento->setNombre($_POST["nombreEvento"]);

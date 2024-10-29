@@ -40,5 +40,13 @@ class EventoZonaDAO{
       GROUP BY z.nombre
     ";
   }
+
+  public function consultarExistencia(){
+    return "
+      SELECT Zona_idZona
+      FROM EventoZona
+      WHERE Zona_idZona = '". $this->zona->getIdZona()."' AND Evento_idEvento = '". $this->evento->getIdEvento()."'
+    ";
+  }
 }
 ?>

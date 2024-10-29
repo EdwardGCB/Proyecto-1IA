@@ -34,10 +34,29 @@ $categorias = $categoria->consultarCategorias();
           }?>
         </ul>
       </div>
-      <a href="/xampp/Proyecto-1IA/paginas/iniciarSesion.php" class="btn bg-white text-muted ">
-        <span class="material-symbols-rounded">person</span>
-        <span>Iniciar Sesion</span>
-      </a>
+        <?php
+        if(isset($_SESSION['id'])){
+          ?>
+          <ul class="navbar-nav">
+            <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"><?php echo $cliente-> getNombre() . " " . $cliente -> getApellido() ?></a>
+              <ul class="dropdown-menu">
+                <li><a class='dropdown-item' href='/xampp/Proyecto-1IA/index.php?cerrarSesion=true'>Cerrar Sesion</a></li>
+              </ul>
+            </li>
+          </ul>
+          <?php
+        }else{
+          ?>
+          <a href="/xampp/Proyecto-1IA/paginas/iniciarSesion.php" class="btn bg-white text-muted ">
+            <span class="material-symbols-rounded">person</span>
+            <span>Iniciar Sesion</span>
+          </a>
+        <?php
+        }
+        ?>
+        
     </div>
   </nav>
   <div class="container-fluid">

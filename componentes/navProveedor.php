@@ -32,7 +32,7 @@
       <li>
         <hr class="dropdown-divider">
       </li>
-      <li><a class="dropdown-item" href="../index.php?cerrarSesion=1">Cerrar Sesion</a></li>
+      <li><a class="dropdown-item" href="/xampp/Proyecto-1IA/index.php?cerrarSesion=true">Cerrar Sesion</a></li>
     </ul>
   </div>
 </div>

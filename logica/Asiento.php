@@ -39,7 +39,7 @@ class Asiento{
     $this->zona = $zona;
   }
   
-  public function __construct($idAsiento=0,$fila="", $columna=0, $estado="", $zona=null){
+  public function __construct($idAsiento=0,$fila="", $columna=0, $zona=null){
     $this -> idAsiento = $idAsiento;
     $this -> fila = $fila;
     $this -> columna = $columna;
@@ -49,7 +49,7 @@ class Asiento{
   public function consultarFilasZona(){
     $conexion = new Conexion();
     $conexion->abrirConexion();
-    $asientoDAO = new AsientoDAO(null,null,null,null,$this->zona);
+    $asientoDAO = new AsientoDAO(null,null,null,$this->zona);
     $conexion->ejecutarConsulta($asientoDAO -> consultarFilasZona());
     $filas = $conexion->numeroFilas();
     $conexion->cerrarConexion();
@@ -59,7 +59,7 @@ class Asiento{
   public function consultarColumnasZona(){
     $conexion = new Conexion();
     $conexion->abrirConexion();
-    $asientoDAO = new AsientoDAO(null,null,null,null,$this->zona);
+    $asientoDAO = new AsientoDAO(null,null,null,$this->zona);
     $conexion->ejecutarConsulta($asientoDAO -> consultarColumnasZona());
     $columnas = $conexion->numeroFilas();
     $conexion->cerrarConexion();
@@ -69,7 +69,7 @@ class Asiento{
   public function asientosDisponibles($evento){
     $conexion = new Conexion();
     $conexion->abrirConexion();
-    $asientoDAO = new AsientoDAO(null,null,null,null,$this->zona);
+    $asientoDAO = new AsientoDAO(null,null,null,$this->zona);
     $conexion->ejecutarConsulta($asientoDAO -> asientosDisponibles($evento));
     $resultado = $conexion->siguienteRegistro();
     $disponibles = $resultado[0];
@@ -80,12 +80,38 @@ class Asiento{
   public function consultarAsiento($limite, $idEvento){
     $conexion = new Conexion();
     $conexion->abrirConexion();
-    $asientoDAO = new AsientoDAO($this->idAsiento,null,null,null,$this->zona);
+    $asientoDAO = new AsientoDAO(null,null,null,$this->zona);
     $conexion->ejecutarConsulta($asientoDAO -> consultarAsiento($limite, $idEvento));
     $resultado = $conexion->siguienteRegistro();
     $this->idAsiento = $resultado[0];
     $this->fila = $resultado[1];
     $this->columna = $resultado[2];
+    $conexion->cerrarConexion();
+  }
+
+  public function existenciaEnZona(){
+    $conexion = new Conexion();
+    $conexion->abrirConexion();
+    $asientoDAO = new AsientoDAO($this->idAsiento,null,null,$this->zona);
+    $conexion->ejecutarConsulta($asientoDAO -> existenciaEnZona());
+    if($conexion->numeroFilas()==0){
+      return false;
+      $conexion->cerrarConexion();
+    }else{
+      return true;
+      $conexion->cerrarConexion();
+    }
+  }
+
+  public function generarAsientos(){
+    $conexion = new Conexion();
+    $conexion->abrirConexion();
+    for ($char = 'A'; $char < 'Z'; $char++) {
+      for ($j = 1; $j < 11; $j++) {
+          $asientoDAO = new AsientoDAO(null, $char, $j, $this->zona);
+          $conexion->ejecutarConsulta($asientoDAO->generarAsiento());
+      }
+    }
     $conexion->cerrarConexion();
   }
 }

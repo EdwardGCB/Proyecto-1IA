@@ -24,7 +24,6 @@ $cliente = new Cliente($idCliente);
 if($cliente->consultar()==false){
   header("Location: iniciarSesion.php");
 }
-
 // Crear una instancia de Evento con el idEvento y obtener los detalles del evento
 $evento = new Evento($idEvento);
 // Esto debería cargar todos los datos del event
@@ -57,7 +56,7 @@ if(isset($_POST["generarTicket"])){
       }else{
         $clienteTemp = new Cliente(null,null,null,$correos[$idZona][$i]);
         $clienteTemp->autenticarCorreo();
-        $asiento = new Asiento(null, null, null,null, $eventoZona2->getZona());
+        $asiento = new Asiento(null, null, null,$eventoZona2->getZona());
         $asiento->consultarAsiento(1, $evento->getIdEvento());
         $ticket = new Ticket(null,$eventoZona2->getValor(),$asiento, $clienteTemp,null,$eventoZona2);
         $total += $eventoZona2->getValor();
@@ -198,9 +197,8 @@ font-size: 16px;
             <?php
             foreach ($eventosZona as $eventoZonaActual) {
                 $idZona = $eventoZonaActual->getZona()->getIdZona();
-                $asiento = new Asiento(null, null, null, null, $eventoZonaActual->getZona());
+                $asiento = new Asiento(null, null, null,$eventoZonaActual->getZona());
                 $cantAsientos = $asiento->asientosDisponibles($evento);
-                echo $cantAsientos;
             ?>
             <tr>
               <td><span style="color: <?= $eventoZonaActual->getZona()->getColor(); ?>;">●

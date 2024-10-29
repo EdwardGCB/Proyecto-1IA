@@ -1,13 +1,19 @@
 <?php
 session_start();
-if(isset($_SESSION["id"])){
-  
+if(isset($_GET["cerrarSesion"])){
+  session_destroy();
 }
 require("logica/Categoria.php");
 require("logica/Ciudad.php");
 require("logica/Evento.php");
 require("logica/Persona.php");
 require("logica/Proveedor.php");
+require("logica/Cliente.php");
+if(isset($_SESSION["id"])){
+  $idCliente=$_SESSION["id"];
+  $cliente = new Cliente($idCliente);
+  $cliente->consultar();
+}
 include("componentes/encabezado.php");
 ?>
 .p-3 {

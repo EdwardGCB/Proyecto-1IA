@@ -3,14 +3,12 @@ class AsientoDAO{
   private $idAsiento;
   private $fila;
   private $columna;
-  private $estado;
   private $zona;
   
-  public function __construct($idAsiento=0,$fila="", $columna=0, $estado=0, $zona=null){
+  public function __construct($idAsiento=0,$fila="", $columna=0, $zona=null){
     $this -> idAsiento = $idAsiento;
     $this -> fila = $fila;
     $this -> columna = $columna;
-    $this -> estado = $estado;
     $this -> zona = $zona;
   }
 
@@ -59,12 +57,26 @@ class AsientoDAO{
             Ticket t ON a.idAsiento = t.Asiento_idAsiento 
              AND t.EventoZona_Evento_idEvento = ez.Evento_idEvento
         WHERE 
-        a.Zona_idZona = '" . $this->zona->getIdZona(). "' AND
+        a.Zona_idZona = '" .$this->zona->getIdZona(). "' AND
         ez.Evento_idEvento = '".$idEvento."' AND
         t.idTicket IS NULL
         LIMIT $limite
     ";
   }
 
+  public function generarAsiento(){
+    return "
+        INSERT INTO Asiento(columna, fila, Zona_idZona)
+        VALUES ('". $this->columna. "', '". $this->fila. "', '". $this->zona->getIdZona(). "')
+    ";
+  }
+
+  public function existenciaEnZona(){
+    return "
+        Select idAsiento
+        FROM Asiento
+        WHERE Zona_idZona = '". $this->zona->getIdZona(). "'
+    ";
+  }
 }
 ?>

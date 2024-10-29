@@ -62,5 +62,6 @@ class Zona{
     $this->color = $resultado[1];
     $conexion->cerrarConexion();
   }
+
 }
 ?>
