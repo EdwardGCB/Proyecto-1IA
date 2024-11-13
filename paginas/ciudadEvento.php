@@ -5,6 +5,12 @@ session_start();
   require('../logica/Proveedor.php');
   require('../logica/Ciudad.php');
   require("../logica/Categoria.php");
+  require("../logica/Cliente.php");
+  if(isset($_SESSION["id"])){
+    $idCliente=$_SESSION["id"];
+    $cliente = new Cliente($idCliente);
+    $cliente->consultar();
+  }
 
   include('../componentes/encabezado.php');
   include('../componentes/Ticket.php');

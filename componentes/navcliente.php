@@ -9,7 +9,7 @@ $categorias = $categoria->consultarCategorias();
       <a class="navbar-brand" href="#">
         <img src="http://www.w3.org/2000/svg" alt="Logo" width="30" height="24"
           class="d-inline-block align-text-top">
-        Bootstrap
+        Ticketera.co
       </a>
       <div class="collapse navbar-collapse position-absolute top-50 start-50 translate-middle" id="navbarNav">
         <ul class="navbar-nav">
