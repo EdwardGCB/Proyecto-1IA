@@ -20,7 +20,13 @@ class FacturaDAO{
     VALUES('".$this->precioTotal."','".$this->cantidadTotal."','".$this->iva."','".$this->cliente->getIdPersona()."')
     ";
   }
-  
+
+  public function consultaPorId() {
+    return "
+    SELECT idFactura, precioTotal, cantidadTotal, IVA, Cliente_idCliente
+    FROM Factura
+    WHERE idFactura = '". $this->idFactura ."'";
+  }
 
 }
 ?>

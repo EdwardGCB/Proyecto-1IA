@@ -16,14 +16,17 @@ class TicketDAO{
     $this -> eventoZona = $eventoZona;
   }
 
-  public function consultarTicket(){
+  public function consultarTicket() {
     return "
-    SELECT idTicket, valor, Factura_idFactura, Asiento_idAsiento 
+    SELECT idTicket, valor, Factura_idFactura, Asiento_idAsiento, EventoZona_Evento_idEvento
     FROM TICKET
-    WHERE Cliente_idCliente = '".$this->cliente->getIdPersona()."' and 
-    EventoZona_Evento_idEvento = '".$this->eventoZona->getEvento()->getIdEvento()."'
+    WHERE Cliente_idCliente = '".$this->cliente->getIdPersona()."' 
+    AND Factura_idFactura = '".$this->factura->getIdFactura()."'
     ";
-  }
+  
+}
+
+  
 
   public function generarTicket(){
     return "

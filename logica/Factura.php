@@ -1,6 +1,7 @@
 <?php
 require_once(__DIR__.'/../persistencia/Conexion.php');
 require (__DIR__.'/../persistencia/FacturaDAO.php');
+
 class Factura{
   private $idFactura;
   private $precioTotal;
@@ -64,6 +65,37 @@ class Factura{
     $this->idFactura = $conexion->obtenerLlaveAutonumerica();
     $conexion->cerrarConexion();
   }
+
+  public function consultarFacturaPorId() {
+    $conexion = new Conexion();
+    $conexion->abrirConexion();
+    
+    $facturaDAO = new FacturaDAO($this->idFactura);
+    $consulta = $facturaDAO->consultaPorId();
+
+    $conexion->ejecutarConsulta($consulta);
+
+    $registro = $conexion->siguienteRegistro();
+    if (!$registro) {
+        $conexion->cerrarConexion();
+        return false;
+    }
+    
+    $this->idFactura = $registro[0];     
+    $this->precioTotal = $registro[1];     
+    $this->cantidadTotal = $registro[2];  
+    $this->iva = $registro[3];            
+    $idCliente = $registro[4];           
+
+    $cliente = new Cliente($idCliente);
+    $cliente->consultar();
+    $this->cliente = $cliente;
+
+    $conexion->cerrarConexion();
+    return true;
+}
+
+
   
 }
 

@@ -72,7 +72,7 @@ if(isset($_POST["generarTicket"])){
     $ticketActual->setFactura($factura);
     $ticketActual->generarTicket();
   }
-  header("Location: ../Factura.php?idFactura=".$factura->getIdFactura()."");
+  header("Location: ../paginas/Factura.php?idFactura=".$factura->getIdFactura()."");
 }
 include("../componentes/encabezado.php");
 ?>

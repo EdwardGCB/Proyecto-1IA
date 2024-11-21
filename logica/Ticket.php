@@ -31,7 +31,6 @@ class Ticket{
   public function getEventoZona() {
     return $this->eventoZona;
   }
-  
   public function setIdTicket($idTicket) {
     $this->idTicket = $idTicket;
   }
@@ -55,7 +54,7 @@ class Ticket{
   public function setEventoZona($eventoZona) {
     $this->eventoZona = $eventoZona;
   }
-  
+
   public function __construct($idTicket=0, $valor=0, $asiento=null, $cliente=null, $factura=null, $eventoZona=null){
     $this -> idTicket = $idTicket;
     $this -> valor = $valor;
@@ -65,21 +64,29 @@ class Ticket{
     $this -> eventoZona = $eventoZona;
   }
 
-  public function consultarTicket(){
+  public function consultarTicket() {
     $conexion = new Conexion();
-    $conexion->abrirConexion();
-    $ticketDAO = new TicketDAO(null, null, null, $this->cliente, null, $this->eventoZona);
+    $conexion->abrirConexion();   
+    $ticketDAO = new TicketDAO(null, null, null, $this->cliente, $this->factura, null);
     $conexion->ejecutarConsulta($ticketDAO->consultarTicket());
-    if($conexion->numeroFilas()!=0){
-      $result = $conexion->siguienteRegistro();
-      $this->idTicket = $result[0];
-      $this->valor = $result[1];
-      //$this->asiento = $result[2];
-      return true;
-    }else{
-      return false;
+
+    if ($conexion->numeroFilas() != 0) {
+        $result = $conexion->siguienteRegistro();
+        $this->idTicket = $result[0];
+        $this->valor = $result[1];
+        $this->factura = $result[2];
+        $this->asiento = $result[3];
+        $this->eventoZona = $result[4];
+        
+        $conexion->cerrarConexion();
+        return true;
+    } else {
+        $conexion->cerrarConexion();
+        return false;
     }
-  }
+}
+
+
 
   public function generarTicket(){
     $conexion = new Conexion();
