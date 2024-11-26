@@ -76,14 +76,45 @@ class Ticket{
         $this->valor = $result[1];
         $this->factura = $result[2];
         $this->asiento = $result[3];
-        $this->eventoZona = $result[4];
-        
+        $evento = new Evento($result[4]);
+        $evento -> consultaIndividual();
+        $this->eventoZona = $evento;
         $conexion->cerrarConexion();
         return true;
     } else {
         $conexion->cerrarConexion();
         return false;
     }
+}
+
+public function consultarTicketsPorFactura() {
+  $conexion = new Conexion();
+  $conexion->abrirConexion();   
+  $ticketDAO = new TicketDAO(null, null, null, $this->cliente, $this->factura, null);
+  $consulta = $ticketDAO->consultarTicketPorFactura();
+  $conexion->ejecutarConsulta($consulta);
+
+  $tickets = [];
+  while ($result = $conexion->siguienteRegistro()) {
+      // Crear el objeto Evento (suponiendo que ya lo tienes)
+      $evento = new Evento($result[4]);
+      $evento->consultaIndividual(); // Obtener detalles del evento
+
+      // Crear el objeto Ticket con los resultados de la consulta
+      $ticket = new Ticket(
+          $result[0], // idTicket
+          $result[1], // valor
+          $result[3], // asiento
+          $this->cliente,
+          $this->factura,
+          $evento // eventoZona
+      );
+
+      $tickets[] = $ticket;
+  }
+  $conexion->cerrarConexion();
+
+  return $tickets;
 }
 
 

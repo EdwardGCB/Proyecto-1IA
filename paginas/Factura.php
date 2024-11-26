@@ -3,17 +3,20 @@ require_once("../logica/Factura.php");
 require_once("../logica/Persona.php");
 require_once("../logica/Cliente.php");
 require_once("../logica/Ticket.php");
+require_once("../logica/Evento.php");
+require_once("../logica/Proveedor.php");
+require_once("../logica/Ciudad.php");
+require_once("../logica/Categoria.php");
+?>
 
-if (!isset($_GET['idFactura'])) {
-    die("ID de factura no proporcionado.");
-}
 
-$idFactura = $_GET['idFactura'];
-$factura = new Factura($idFactura);
+<?php
+if (isset($_GET['idFactura'])) {
+    $idFactura = $_GET['idFactura'];
 
-if (!$factura->consultarFacturaPorId()) {
-    die("Factura no encontrada.");
-}
+    $factura = new Factura($idFactura, null, null, null, null);
+    $facturas = $factura->consultarFacturaPorId();
+
 
 $idFactura = $factura->getIdFactura();
 $precioTotal = number_format($factura->getPrecioTotal(), 2);
@@ -21,32 +24,16 @@ $cantidadTotal = $factura->getCantidadTotal();
 $iva = $factura->getIva() * 100;
 $cliente = $factura->getCliente();
 
-// Obtenemos el id_cliente de la factura
-$idCliente = $factura->getCliente()->getIdPersona();
-
-// Crear el objeto Ticket
 $ticket = new Ticket(null, null, null, $cliente, $factura, null);
+$tickets = $ticket->consultarTicketsPorFactura(); // Obtener todos los tickets asociados a la factura
 
-// Consultar el ticket relacionado con el cliente
-if ($ticket->consultarTicket()) {
-    // Si se encuentra un ticket, obtenemos el valor de eventoZona desde el ticket
-    $eventoZona = $ticket->getEventoZona();
-
-    // Ahora, puedes usar $eventoZona en tu lógica si es necesario
-    $idTicket = $ticket->getIdTicket();
-    $valor = $ticket->getValor();
-    $facturaId = $ticket->getFactura();
-    $asientoId = $ticket->getAsiento();
-} else {
-    $ticketError = "No se encontró un ticket relacionado con esta factura.";
 }
+
+
 ?>
-<!DOCTYPE html>
-<html lang="es">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Factura #<?php echo htmlspecialchars($idFactura); ?></title>
+    <title>Factura #    <?php echo htmlspecialchars($idFactura); ?></title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -106,7 +93,6 @@ if ($ticket->consultarTicket()) {
             <p><strong>Cantidad Total:</strong> <?php echo htmlspecialchars($cantidadTotal); ?></p>
             <p><strong>IVA:</strong> <?php echo htmlspecialchars($iva); ?>%</p>
         </div>
-
         <div class="client-info">
             <h2>Información del Cliente</h2>
             <p><strong>Cliente:</strong> 
@@ -117,18 +103,30 @@ if ($ticket->consultarTicket()) {
             </p>
             <p><strong>Correo:</strong> 
                 <?php echo isset($cliente) ? htmlspecialchars($cliente->getCorreo()) : 'No disponible'; ?>
-            </p>    
+            </p>
         </div>
 
         <div class="ticket-info">
-            <h2>Información del Ticket</h2>
-            <?php if (isset($ticketError)): ?>
-                <p><?php echo htmlspecialchars($ticketError); ?></p>
+            <h2>Información de los Tickets</h2>
+            <?php if (!empty($tickets)): ?>
+                <?php foreach ($tickets as $ticket): ?>
+                    <div class="ticket">
+                        <p><strong>ID del Ticket:</strong> <?php echo htmlspecialchars($ticket->getIdTicket()); ?></p>
+                        <p><strong>Valor:</strong> $<?php echo htmlspecialchars($ticket->getValor()); ?></p>
+                        <p><strong>ID del Asiento:</strong> <?php echo htmlspecialchars($ticket->getAsiento()); ?></p>
+                    </div>
+                    <div class="event-info">
+                        <h3>Información del Evento</h3>
+                        <?php $eventoZona = $ticket->getEventoZona(); ?>
+                        <p><strong>Nombre del Evento:</strong> <?php echo htmlspecialchars($eventoZona->getNombre()); ?></p>
+                        <p><strong>Fecha del Evento:</strong> <?php echo htmlspecialchars($eventoZona->getFechaEvento()); ?></p>
+                        <p><strong>Hora del Evento:</strong> <?php echo htmlspecialchars($eventoZona->getHoraEvento()); ?></p>
+                        <p><strong>Sitio:</strong> <?php echo htmlspecialchars($eventoZona->getSitio()); ?></p>
+                        <p><strong>Ciudad:</strong> <?php echo htmlspecialchars($eventoZona->getCiudad()->getNombre()); ?></p>
+                    </div>
+                <?php endforeach; ?>
             <?php else: ?>
-                <p><strong>ID del Ticket:</strong> <?php echo htmlspecialchars($idTicket); ?></p>
-                <p><strong>Valor:</strong> $<?php echo htmlspecialchars($valor); ?></p>
-                <p><strong>ID del Asiento:</strong> <?php echo htmlspecialchars($asientoId); ?></p>
-                <p><strong>Evento y Zona:</strong> <?php echo htmlspecialchars($eventoZona); ?></p>
+                <p>No se encontraron tickets relacionados con esta factura.</p>
             <?php endif; ?>
         </div>
 
@@ -147,3 +145,4 @@ if ($ticket->consultarTicket()) {
     </div>
 </body>
 </html>
+<script src='../componentes/Ticket.php'></script>
