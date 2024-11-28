@@ -89,6 +89,27 @@ class Asiento{
     $conexion->cerrarConexion();
   }
 
+  public function consultarPorId() {
+    $conexion = new Conexion();
+    $conexion->abrirConexion();
+    
+    // Crear el DAO con el idAsiento actual
+    $asientoDAO = new AsientoDAO($this->idAsiento);
+    
+    // Ejecutar la consulta para obtener los datos del asiento
+    $conexion->ejecutarConsulta($asientoDAO->consultarPorId());
+    $resultado = $conexion->siguienteRegistro();
+
+    // Validar si se obtuvo un resultado
+    if ($resultado) {
+        $this->fila = $resultado[1];    // Fila
+        $this->columna = $resultado[0]; // Columna
+    }
+
+    $conexion->cerrarConexion();
+}
+
+
   public function existenciaEnZona(){
     $conexion = new Conexion();
     $conexion->abrirConexion();
