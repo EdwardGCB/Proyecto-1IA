@@ -114,9 +114,9 @@ $tickets = $ticket->consultarTicketsPorFactura(); // Obtener todos los tickets a
             <p>Total a Pagar: $<?php echo htmlspecialchars($precioTotal); ?></p>
         </div>
         
-        <di class="print-btn">
+        <div class="print-btn">
             <button onclick="window.print()">Imprimir Factura</button>
-        </di    v>
+        </div>
 
         <div class="footer">
             <p>Gracias por su compra</p>
@@ -126,7 +126,6 @@ $tickets = $ticket->consultarTicketsPorFactura(); // Obtener todos los tickets a
     <br><br><br><br><br>
     <div class="container">
     <div class="ticket-info">
-            <h2>Información de los Tickets</h2>
             <?php if (!empty($tickets)): ?>
                 <?php foreach ($tickets as $ticket):
                     ?>
@@ -137,21 +136,24 @@ $tickets = $ticket->consultarTicketsPorFactura(); // Obtener todos los tickets a
                             </time>
                         </section>
                         <section class="card-cont">
-                            <h3>Evento: <?php echo htmlspecialchars($ticket->getEventoZona()->getNombre()); ?></h3>
+                            <h3>Propietario:</strong> <?php echo htmlspecialchars($ticket->getCliente()->getNombre()." ".$ticket->getCliente()->getApellido()); ?></p></h3>
+                                
                             <div class="even-date">
                                 <i class="fa fa-calendar"></i>
                                 <time>
-                                    <span><?php echo date("l, d F Y", strtotime($ticket->getEventoZona()->getFechaEvento())); ?></span>
+                                    <span><?php echo date(" d F Y", strtotime($ticket->getEventoZona()->getFechaEvento())); ?></span>
                                     <span><?php echo htmlspecialchars($ticket->getEventoZona()->getHoraEvento()); ?></span>
                                 </time>
                             </div>
                             <div class="even-info">
                                 <i class="fa fa-ticket"></i>
-                                <p><strong>Valor:</strong> $<?php echo htmlspecialchars($ticket->getValor()); ?></p>
                                 <p><strong>Asiento:</strong> <?php echo htmlspecialchars($ticket->getAsiento()->getFila() . "-" . $ticket->getAsiento()->getColumna()); ?></p>
                                 <p><strong>Sitio:</strong> <?php echo htmlspecialchars($ticket->getEventoZona()->getSitio()); ?></p>
                                 <p><strong>Ciudad:</strong> <?php echo htmlspecialchars($ticket->getEventoZona()->getCiudad()->getNombre()); ?></p>
                             </div>
+                            <br>
+                            <p>Evento: <?php echo htmlspecialchars($ticket->getEventoZona()->getNombre()); ?></p>
+
                         </section>
                     </article>
                 <?php endforeach; ?>

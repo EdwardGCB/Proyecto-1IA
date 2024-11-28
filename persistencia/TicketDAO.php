@@ -26,7 +26,7 @@ class TicketDAO{
 
 public function consultarTicketPorFactura() {
   return "
-  SELECT idTicket, valor, Factura_idFactura, Asiento_idAsiento, EventoZona_Evento_idEvento
+  SELECT idTicket, valor, Cliente_idCliente, Factura_idFactura, Asiento_idAsiento, EventoZona_Evento_idEvento
   FROM TICKET
   WHERE Factura_idFactura = '".$this->factura->getIdFactura()."'
   "; 

@@ -92,14 +92,16 @@ public function consultarTicketsPorFactura() {
 
   $conexion = new Conexion();
   $conexion->abrirConexion();   
-  $ticketDAO = new TicketDAO(null, null, null, $this->cliente, $this->factura, null);
+  $ticketDAO = new TicketDAO(null, null, null, null, $this->factura, null);
   $conexion->ejecutarConsulta($ticketDAO->consultarTicketPorFactura());
   while ($result = $conexion->siguienteRegistro()) {
+      $cliente = new Cliente($result[2]);
+      $cliente->consultar();
       $asiento = new Asiento($result[3]); 
       $asiento->consultarPorId(); 
       $evento = new Evento($result[4]);
       $evento->consultaIndividual(); 
-      $ticket = new Ticket($result[0], $result[1], $asiento, $this->cliente, $this->factura,$evento);
+      $ticket = new Ticket($result[0], $result[1], $asiento, $cliente, $this->factura,$evento);
       array_push($tickets, $ticket);
   }
   $conexion->cerrarConexion();
