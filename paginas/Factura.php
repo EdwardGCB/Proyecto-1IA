@@ -7,6 +7,8 @@ require_once("../logica/Evento.php");
 require_once("../logica/Proveedor.php");
 require_once("../logica/Ciudad.php");
 require_once("../logica/Categoria.php");
+require_once("../logica/Asiento.php");
+require_once("../logica/Zona.php");
 
 include('../componentes/encabezado.php');
 include('../componentes/Ticket.php');
@@ -108,56 +110,57 @@ $tickets = $ticket->consultarTicketsPorFactura(); // Obtener todos los tickets a
                 <?php echo isset($cliente) ? htmlspecialchars($cliente->getCorreo()) : 'No disponible'; ?>
             </p>
         </div>
-        <div class="ticket-info">
-    <h2>Información de los Tickets</h2>
-    <?php if (!empty($tickets)): ?>
-        <?php foreach ($tickets as $ticket): ?>
-            <article class="card fl-left">
-            <section class="date">
-                <time datetime="<?php echo htmlspecialchars($ticket->getIdTicket()); ?>">
-                    <span><?php echo htmlspecialchars($ticket->getIdTicket()); ?></span> <!-- ID del Ticket -->
-                </time>
-            </section>
-
-
-                <section class="card-cont">
-                    <h3>Evento: <?php echo htmlspecialchars($ticket->getEventoZona()->getNombre()); ?></h3>
-                    <div class="even-date">
-                        <i class="fa fa-calendar"></i>
-                        <time>
-                            <span><?php echo date("l, d F Y", strtotime($ticket->getEventoZona()->getFechaEvento())); ?></span>
-                            <span><?php echo htmlspecialchars($ticket->getEventoZona()->getHoraEvento()); ?></span>
-                        </time>
-                    </div>
-                    <div class="even-info">
-                        <i class="fa fa-ticket"></i>
-                        <p><strong>Valor:</strong> $<?php echo htmlspecialchars($ticket->getValor()); ?></p>
-                        <p><strong>ID del Asiento:</strong> <?php echo htmlspecialchars($ticket->getAsiento()); ?></p>
-                        <p><strong>Sitio:</strong> <?php echo htmlspecialchars($ticket->getEventoZona()->getSitio()); ?></p>
-                        <p><strong>Ciudad:</strong> <?php echo htmlspecialchars($ticket->getEventoZona()->getCiudad()->getNombre()); ?></p>
-                    </div>
-                </section>
-            </article>
-        <?php endforeach; ?>
-    <?php else: ?>
-        <p>No se encontraron tickets relacionados con esta factura.</p>
-    <?php endif; ?>
-</div>
-
-
         <div class="total">
             <p>Total a Pagar: $<?php echo htmlspecialchars($precioTotal); ?></p>
         </div>
         
-        <div class="print-btn">
+        <di class="print-btn">
             <button onclick="window.print()">Imprimir Factura</button>
-        </div>
+        </di    v>
 
         <div class="footer">
             <p>Gracias por su compra</p>
             <p>Si tiene preguntas, contáctenos al soporte@example.com</p>
         </div>
     </div>
+    <br><br><br><br><br>
+    <div class="container">
+    <div class="ticket-info">
+            <h2>Información de los Tickets</h2>
+            <?php if (!empty($tickets)): ?>
+                <?php foreach ($tickets as $ticket):
+                    ?>
+                    <article class="card fl-left">
+                        <section class="date">
+                            <time datetime="<?php echo htmlspecialchars($ticket->getIdTicket()); ?>">
+                                <span><?php echo htmlspecialchars($ticket->getIdTicket()); ?></span> <!-- ID del Ticket -->
+                            </time>
+                        </section>
+                        <section class="card-cont">
+                            <h3>Evento: <?php echo htmlspecialchars($ticket->getEventoZona()->getNombre()); ?></h3>
+                            <div class="even-date">
+                                <i class="fa fa-calendar"></i>
+                                <time>
+                                    <span><?php echo date("l, d F Y", strtotime($ticket->getEventoZona()->getFechaEvento())); ?></span>
+                                    <span><?php echo htmlspecialchars($ticket->getEventoZona()->getHoraEvento()); ?></span>
+                                </time>
+                            </div>
+                            <div class="even-info">
+                                <i class="fa fa-ticket"></i>
+                                <p><strong>Valor:</strong> $<?php echo htmlspecialchars($ticket->getValor()); ?></p>
+                                <p><strong>Asiento:</strong> <?php echo htmlspecialchars($ticket->getAsiento()->getFila() . "-" . $ticket->getAsiento()->getColumna()); ?></p>
+                                <p><strong>Sitio:</strong> <?php echo htmlspecialchars($ticket->getEventoZona()->getSitio()); ?></p>
+                                <p><strong>Ciudad:</strong> <?php echo htmlspecialchars($ticket->getEventoZona()->getCiudad()->getNombre()); ?></p>
+                            </div>
+                        </section>
+                    </article>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <p>No se encontraron tickets relacionados con esta factura.</p>
+            <?php endif; ?>
+        </div>
+    </div>
+    
 </body>
 </html>
 <script src='../componentes/Ticket.php'></script>
