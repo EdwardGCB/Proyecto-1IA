@@ -88,29 +88,19 @@ class Ticket{
 }
 
 public function consultarTicketsPorFactura() {
+  $tickets = array();
+
   $conexion = new Conexion();
   $conexion->abrirConexion();   
   $ticketDAO = new TicketDAO(null, null, null, $this->cliente, $this->factura, null);
-  $consulta = $ticketDAO->consultarTicketPorFactura();
-  $conexion->ejecutarConsulta($consulta);
-
-  $tickets = [];
+  $conexion->ejecutarConsulta($ticketDAO->consultarTicketPorFactura());
   while ($result = $conexion->siguienteRegistro()) {
-      // Crear el objeto Evento (suponiendo que ya lo tienes)
+      $asiento = new Asiento($result[3]); 
+      $asiento->consultarPorId(); 
       $evento = new Evento($result[4]);
-      $evento->consultaIndividual(); // Obtener detalles del evento
-
-      // Crear el objeto Ticket con los resultados de la consulta
-      $ticket = new Ticket(
-          $result[0], // idTicket
-          $result[1], // valor
-          $result[3], // asiento
-          $this->cliente,
-          $this->factura,
-          $evento // eventoZona
-      );
-
-      $tickets[] = $ticket;
+      $evento->consultaIndividual(); 
+      $ticket = new Ticket($result[0], $result[1], $asiento, $this->cliente, $this->factura,$evento);
+      array_push($tickets, $ticket);
   }
   $conexion->cerrarConexion();
 
