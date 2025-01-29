@@ -6,14 +6,14 @@
   <?php $paginaAct = basename($_SERVER['PHP_SELF'])?>
   <ul class="nav nav-pills flex-column mb-auto">
     <li class="nav-item">
-      <a href="../paginas/sesionProveedor.php"
+      <a href=" ?pid=<?=base64_encode("paginas/sesionProveedor.php")?>"
         class="nav-link <?= $paginaAct == 'sesionProveedor.php' ? 'active' : 'link-light' ?>" aria-current="page">
         <span class="material-symbols-rounded">home</span>
         Inicio
       </a>
     </li>
     <li>
-      <a href="../paginas/eventos.php" class="nav-link <?= $paginaAct == 'eventos.php' ? 'active' : 'link-light' ?>">
+      <a href=" ?pid=<?=base64_encode("paginas/eventos.php")?>" class="nav-link <?= $paginaAct == 'eventos.php' ? 'active' : 'link-light' ?>">
         <span class="material-symbols-rounded">local_activity</span>
         Eventos
       </a>
@@ -32,7 +32,7 @@
       <li>
         <hr class="dropdown-divider">
       </li>
-      <li><a class="dropdown-item" href="/xampp/Proyecto-1IA/index.php?cerrarSesion=true">Cerrar Sesion</a></li>
+      <li><a class="dropdown-item" href="/Proyecto-1IA/?cerrarSesion=true">Cerrar Sesion</a></li>
     </ul>
   </div>
 </div>

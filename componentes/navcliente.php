@@ -2,7 +2,6 @@
 $categoria = new Categoria();
 $categorias = $categoria->consultarCategorias();
 ?>
-
 <div class="container-fluid full-page">
   <nav class="navbar navbar-expand-lg">
     <div class="container-fluid">
@@ -28,7 +27,7 @@ $categorias = $categoria->consultarCategorias();
             }
             echo "
             <li class='nav-item'>
-              <a class='nav-link' href='/xampp/Proyecto-1IA/paginas/CategoriaEvento.php?idCategoria=".$categoriaActual->getIdCategoria()."'>".$substring."</a>
+              <a class='nav-link' href='/xampp/Proyecto-1IA/?pid=".base64_encode("paginas/CategoriaEvento.php")."&idCategoria=".$categoriaActual->getIdCategoria()."'>".$substring."</a>
             </li>";
    
           }?>
@@ -36,6 +35,8 @@ $categorias = $categoria->consultarCategorias();
       </div>
         <?php
         if(isset($_SESSION['id'])){
+          $cliente = new Cliente($_SESSION['id']);
+          $cliente->consultar();
           ?>
           <ul class="navbar-nav">
             <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" role="button"
@@ -49,7 +50,7 @@ $categorias = $categoria->consultarCategorias();
           <?php
         }else{
           ?>
-          <a href="/xampp/Proyecto-1IA/paginas/iniciarSesion.php" class="btn bg-white text-muted ">
+          <a href="/xampp/Proyecto-1IA/?pid=<?=base64_encode("paginas/iniciarSesion.php")?>" class="btn bg-white text-muted ">
             <span class="material-symbols-rounded">person</span>
             <span>Iniciar Sesion</span>
           </a>
@@ -62,10 +63,7 @@ $categorias = $categoria->consultarCategorias();
   <div class="container-fluid">
     <div class="centered-form">
       <form class="d-flex" role="search">
-        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-        <button class="btn btn-light" type="submit">
-          <span class="material-symbols-rounded">search</span>
-        </button>
+        <input id="search"class="form-control me-2" type="search" placeholder="Buscar" aria-label="Search">
       </form>
     </div>
   </div>

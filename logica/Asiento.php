@@ -1,6 +1,6 @@
 <?php
-require_once "../persistencia/Conexion.php" ;
-require "../persistencia/AsientoDAO.php" ;
+require_once (__DIR__."/../persistencia/Conexion.php");
+require(__DIR__."/../persistencia/AsientoDAO.php");
 class Asiento{
   private $idAsiento;
   private $fila;

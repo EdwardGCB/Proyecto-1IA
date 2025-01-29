@@ -1,4 +1,4 @@
-<?php
+x|<?php
 class EventoDAO{
   private $idEvento;
   private $sitio;
@@ -74,7 +74,7 @@ class EventoDAO{
   public function numeroEventosProveedor(){
     return "select idEvento
     from Evento
-    where Proveedor_idProveedor = '".$this->proveedor->getIdPersona()."'";
+    where Proveedor_idProveedor = ".$this->proveedor->getIdPersona()."";
   }
 
   public function actualizar(){
@@ -112,6 +112,14 @@ class EventoDAO{
     from Evento
     where ciudad_idCiudad = '". $this->ciudad->getIdCiudad()."'
     order by nombre asc";
+  }
+
+  public function consultarPorNombre(){
+    return "SELECT idEvento, edadMinima, nombre, fechaEvento, horaEvento, Proveedor_idProveedor, ciudad_idCiudad,Categoria_idCategoria
+    FROM Evento
+    WHERE nombre LIKE '%". $this->nombre. "%'
+    order by nombre asc
+    ";
   }
 
 }

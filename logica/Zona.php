@@ -1,7 +1,7 @@
 <?php
 
-require_once "../persistencia/Conexion.php";
-require "../persistencia/ZonaDAO.php";
+require_once (__DIR__."/../persistencia/Conexion.php");
+require(__DIR__."/../persistencia/ZonaDAO.php");
 class Zona{
   private $idZona;
   private $nombre;

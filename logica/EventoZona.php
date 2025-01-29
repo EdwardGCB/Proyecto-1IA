@@ -1,6 +1,6 @@
 <?php
-require_once "../persistencia/Conexion.php";
-require "../persistencia/EventoZonaDAO.php";
+require_once (__DIR__."/../persistencia/Conexion.php");
+require(__DIR__."/../persistencia/EventoZonaDAO.php");
 class EventoZona{
   private $valor;
   private $aforo;
@@ -51,6 +51,7 @@ class EventoZona{
     $conexion = new Conexion();
     $conexion->abrirConexion();
     $EventoZonaDAO = new EventoZonaDAO(null,null,$this->evento);
+    echo $EventoZonaDAO->consultarPorEvento();
     $conexion->ejecutarConsulta($EventoZonaDAO->consultarPorEvento());
     while($registro = $conexion->siguienteRegistro()){
       $zona=null;
@@ -94,11 +95,11 @@ class EventoZona{
     $eventoZonaDAO =  new EventoZonaDAO(null,null,$this->evento,$this->zona);
     $conexion->ejecutarConsulta($eventoZonaDAO -> consultarExistencia());
     if($conexion->numeroFilas()==0){
+      $conexion->cerrarConexion();
       return false;
-      $conexion->cerrarConexion();
     }else{
-      return true;
       $conexion->cerrarConexion();
+      return true;
     }
   }
 }
