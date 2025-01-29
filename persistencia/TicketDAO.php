@@ -33,5 +33,13 @@ class TicketDAO{
     '".$this->eventoZona->getEvento()->getIdEvento()."', '".$this->eventoZona->getZona()->getIdZona()."')
     ";
   }
+
+  public function consultarTicketPorFactura() {
+    return "
+    SELECT idTicket, valor, Cliente_idCliente, Factura_idFactura, Asiento_idAsiento, EventoZona_Evento_idEvento
+    FROM TICKET
+    WHERE Factura_idFactura = '".$this->factura->getIdFactura()."'
+    "; 
+  }
 }
 ?>

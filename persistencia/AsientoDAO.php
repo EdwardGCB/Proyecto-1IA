@@ -78,5 +78,13 @@ class AsientoDAO{
         WHERE Zona_idZona = '". $this->zona->getIdZona(). "'
     ";
   }
+  
+  public function consultarPorId() {
+    return "
+        SELECT columna, fila 
+        FROM Asiento
+        WHERE idAsiento = '" . $this->idAsiento . "'
+    ";
+}
 }
 ?>

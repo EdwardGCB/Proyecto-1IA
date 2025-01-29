@@ -56,7 +56,7 @@ if (isset($_POST["generarTicket"])) {
     $ticketActual->setFactura($factura);
     $ticketActual->generarTicket();
   }
-  header("Location: ../Factura.php?idFactura=" . $factura->getIdFactura() . "");
+  header("Location: /?pid=".base64_encode("paginas/Factura.php")."&idFactura=" . $factura->getIdFactura() . "");
 }
 ?>
 <style>

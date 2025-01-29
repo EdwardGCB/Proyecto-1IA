@@ -31,7 +31,8 @@ $paginasConSesion = array(
   "paginas/crearEvento.php",
   "paginas/editEvento.php",
   "paginas/eventos.php",
-  "paginas/sesionProveedor.php"
+  "paginas/sesionProveedor.php",
+  "paginas/Factura.php"
 );
 
 $paginasPDF = array(
@@ -54,6 +55,7 @@ if (isset($_GET['pid']) && in_array($_GET['pid'], $paginasPDF)) {
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
     </script>
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
       .material-symbols-rounded {
         font-variation-settings:
