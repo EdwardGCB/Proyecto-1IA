@@ -29,30 +29,14 @@ if ($evento) {
     $reserva += $eventoZonaActual->getValor() * $cantidadReservas[$eventoZonaActual->getZona()->getNombre()];
   }
 }
+include("componentes/estiloMenu.php");
 ?>
 
-<style>
-  .full-height-sidebar {
-    height: 100%;
-  }
-
-  .progress-bar {
-    text-align: center;
-    line-height: 30px;
-    color: white;
-  }
-
-  .principal {
-    height: 100%;
-  }
-</style>
-<div class="row principal">
-  <div class="col-2">
+<body id="body-pd">
     <?php
-    include "componentes/navProveedor.php";
+    include("componentes/navProveedor.php");
     ?>
-  </div>
-  <div class="col-10">
+    <!--Container Main-->
     <div class="container">
       <div class="container mt-4">
         <div class="container-fluid">
@@ -64,8 +48,8 @@ if ($evento) {
             <div class="card">
               <div class="card-body">
                 <h5 class="card-title">Eventos</h5>
-                <p class="card-text">Cantidad de Eventos: <?php echo $cantidadEventos ?></p>
-                <a href="eventos.php" class="btn btn-primary">Ver Eventos</a>
+                <p class="card-text">Cantidad de Eventos: <?php echo count($cantidadEventos) ?></p>
+                <a href=" ?pid=<?=base64_encode("paginas/eventos.php")?>" class="btn btn-primary">Ver Eventos</a>
               </div>
             </div>
           </div>
@@ -122,5 +106,5 @@ if ($evento) {
         </div>
       </div>
     </div>
-  </div>
-</div>
+    <script src="client/js/home.js"></script>
+</body>

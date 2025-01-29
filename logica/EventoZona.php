@@ -51,7 +51,6 @@ class EventoZona{
     $conexion = new Conexion();
     $conexion->abrirConexion();
     $EventoZonaDAO = new EventoZonaDAO(null,null,$this->evento);
-    echo $EventoZonaDAO->consultarPorEvento();
     $conexion->ejecutarConsulta($EventoZonaDAO->consultarPorEvento());
     while($registro = $conexion->siguienteRegistro()){
       $zona=null;

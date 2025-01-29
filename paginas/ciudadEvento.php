@@ -1,20 +1,20 @@
 <?php
-include('../componentes/Ticket.php');
+include("componentes/Ticket.php");
+include("componentes/navcliente.php");
 ?>
-</style>
-<body>
-  <?php include('../componentes/navcliente.php');?>
-  <br>
-  <section class="container">
-    <h1>Proximos Eventos</h1>
-    <div class="row">
-      <?php
+
+<br>
+<div class="container mt-4" id="home">
+    <section class="container">
+        <h1>Proximos Eventos</h1>
+        <div class="row">
+            <?php
             // Verificar si se ha pasado un idCategoria como parámetro en la URL
-        if (isset($_GET['idCiudad'])) {
-                $idCiudad= $_GET['idCiudad'];
+            if (isset($_GET['idCiudad'])) {
+                $idCiudad = $_GET['idCiudad'];
                 // Instanciar la clase Categoria y llamar al método para consultar eventos por categoría
                 $ciudad = new Ciudad($idCiudad);
-                $evento = new Evento(null,null,null,null,null,null,null,null,null,$ciudad);
+                $evento = new Evento(null, null, null, null, null, null, null, null, null, $ciudad);
                 $eventos = $evento->consultarPorCiudad();
                 // Echo para ver los datos
                 if (!empty($eventos)) {
@@ -29,55 +29,54 @@ include('../componentes/Ticket.php');
                         $anio = $fecha ? $fecha->format("Y") : "";
 
             ?>
-      <article class="card fl-left">
-        <section class="date">
-          <time datetime="<?php echo htmlspecialchars($eventoActual->getFechaEvento()); ?>">
-            <?php
-                // Obtener el día
-                $fechaEvento = $eventoActual->getFechaEvento();
-                $fecha = new DateTime($fechaEvento);
-                $dia = $fecha->format("d");
-            ?>
-            <span><?php echo $dia; ?></span> <!-- Día -->
-          </time>
-        </section>
-        <section class="card-cont">
-          <small><?php echo htmlspecialchars($eventoActual->getNombre()); ?></small>
-          <h3><?php echo htmlspecialchars($eventoActual->getNombre()); ?> en
-            <?php echo htmlspecialchars($eventoActual->getCiudad()->getNombre()); ?></h3>
-          <div class="even-date">
-            <i class="fa fa-calendar"></i>
-            <time>
-              <span><?php echo date("l, d F Y", strtotime($eventoActual->getFechaEvento())); ?></span>
-              <span><?php echo htmlspecialchars($eventoActual->getHoraEvento()); ?></span>
-            </time>
-          </div>
-          <div class="even-info">
-            <i class="fa fa-map-marker"></i>
-            <p>Proveedor: <?php echo $eventoActual->getProveedor()->getNombre(); ?></p>
-            <p>Ciudad: <?php echo $eventoActual->getCiudad()->getNombre(); ?></p>
-            <p>
-            <a href="eventoInfo.php=<?php echo $eventoActual->getIdEvento();?>">
-            <span class="material-symbols-rounded">
-                more_horiz
-            </span>
-            </a>
-            </p>
-          </div>
-        </section>
-      </article>
+                        <article class="card fl-left">
+                            <section class="date">
+                                <time datetime="<?php echo htmlspecialchars($eventoActual->getFechaEvento()); ?>">
+                                    <?php
+                                    // Obtener el día
+                                    $fechaEvento = $eventoActual->getFechaEvento();
+                                    $fecha = new DateTime($fechaEvento);
+                                    $dia = $fecha->format("d");
+                                    ?>
+                                    <span><?php echo $dia; ?></span> <!-- Día -->
+                                </time>
+                            </section>
+                            <section class="card-cont">
+                                <small><?php echo htmlspecialchars($eventoActual->getNombre()); ?></small>
+                                <h3><?php echo htmlspecialchars($eventoActual->getNombre()); ?> en
+                                    <?php echo htmlspecialchars($eventoActual->getCiudad()->getNombre()); ?></h3>
+                                <div class="even-date">
+                                    <i class="fa fa-calendar"></i>
+                                    <time>
+                                        <span><?php echo date("l, d F Y", strtotime($eventoActual->getFechaEvento())); ?></span>
+                                        <span><?php echo htmlspecialchars($eventoActual->getHoraEvento()); ?></span>
+                                    </time>
+                                </div>
+                                <div class="even-info">
+                                    <i class="fa fa-map-marker"></i>
+                                    <p>Proveedor: <?php echo $eventoActual->getProveedor()->getNombre(); ?></p>
+                                    <p>Ciudad: <?php echo $eventoActual->getCiudad()->getNombre(); ?></p>
+                                    <p>
+                                        <a href="?pid=<?= base64_encode("paginas/eventoInfo.php") ?>&idEvento=<?php echo $eventoActual->getIdEvento(); ?>">
+                                            <span class="material-symbols-rounded">
+                                                more_horiz
+                                            </span>
+                                        </a>
+                                    </p>
+                                </div>
+                            </section>
+                        </article>
 
-      <?php
-              }
-          } else {
-              echo "<p>No se encontraron eventos en esta ciudad.</p>";
-          }
-      } else {
-          echo "<p>No se ha seleccionado ninguna categoría.</p>";
-      }
-      ?>
-    </div>
-  </section>
-  <?php include("../componentes/footer.php")?>
-</body>
-</html>
+            <?php
+                    }
+                } else {
+                    echo "<p>No se encontraron eventos en esta ciudad.</p>";
+                }
+            } else {
+                echo "<p>No se ha seleccionado ninguna categoría.</p>";
+            }
+            ?>
+        </div>
+    </section>
+</div>
+<?php include("componentes/footer.php") ?>

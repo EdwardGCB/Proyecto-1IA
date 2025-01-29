@@ -1,16 +1,15 @@
 <?php
-include("componentes/Ticket.php");
-include("componentes/navcliente.php");
+include('componentes/Ticket.php');
 ?>
+<br>
 
-<div class="container mt-4" id="home"> 
-<section class="container">
+<section class="container" id="events">
     <h1>Proximos Eventos</h1>
     <div class="row">
         <?php
         // Verificar si se ha pasado un idCategoria como parámetro en la URL
-        if (isset($_GET['idCategoria'])) {
-            $idCategoria = $_GET['idCategoria'];
+        if (isset($_GET['id'])) {
+            $idCategoria = $_GET['id'];
 
             // Instanciar la clase Categoria y llWamar al método para consultar eventos por categoría
             $categoria = new Categoria($idCategoria);
@@ -82,5 +81,3 @@ include("componentes/navcliente.php");
         ?>
     </div>
 </section>
-</div>
-<?php include("componentes/footer.php") ?>

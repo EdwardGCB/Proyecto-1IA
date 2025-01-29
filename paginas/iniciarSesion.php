@@ -37,7 +37,7 @@ if (isset($_POST["autenticar"])) {
 		<div class="row justify-content-sm-center h-100">
 			<div class="col-xxl-4 col-xl-5 col-lg-5 col-md-7 col-sm-9">
 				<div class="text-center my-5">
-					<img src="https://getbootstrap.com/docs/5.0/assets/brand/bootstrap-logo.svg" alt="logo" width="100">
+					<img src="img/logo1.png" alt="logo" width="200">
 				</div>
 				<div class="card shadow-lg">
 					<div class="card-body p-5">

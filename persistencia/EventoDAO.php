@@ -1,4 +1,4 @@
-x|<?php
+<?php
 class EventoDAO{
   private $idEvento;
   private $sitio;
@@ -71,10 +71,10 @@ class EventoDAO{
     where idEvento = '". $this->idEvento."' and Proveedor_idProveedor = '". $this->proveedor->getIdPersona()."'";
   }
 
-  public function numeroEventosProveedor(){
-    return "select idEvento
-    from Evento
-    where Proveedor_idProveedor = ".$this->proveedor->getIdPersona()."";
+  public function numeroEventosProveedor($busqueda =""){
+    return "SELECT idEvento, sitio, nombre, fechaEvento, ciudad_idciudad, Categoria_idCategoria
+    FROM Evento
+    WHERE Proveedor_idProveedor = ".$this->proveedor->getIdPersona()." AND nombre LIKE '%".$busqueda."%'";
   }
 
   public function actualizar(){
@@ -119,6 +119,13 @@ class EventoDAO{
     FROM Evento
     WHERE nombre LIKE '%". $this->nombre. "%'
     order by nombre asc
+    ";
+  }
+
+  public function setImagen(){
+    return "UPDATE evento 
+            SET flayer = ".$this->flayer."
+            WHERE idEvento = ".$this->idEvento."
     ";
   }
 

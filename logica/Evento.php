@@ -149,7 +149,7 @@ class Evento
     $conexion = new Conexion();
     $conexion->abrirConexion();
     $eventoDAO = new EventoDAO();
-    $conexion->ejecutarConsulta(sentenciaSQL: $eventoDAO->consultaGeneral($value, $inicio, $datos));
+    $conexion->ejecutarConsulta($eventoDAO->consultaGeneral($value, $inicio, $datos));
     while ($registro = $conexion->siguienteRegistro()) {
       $categoria = null;
       $ciudad = null;
@@ -295,15 +295,38 @@ class Evento
     }
   }
 
-  public function numeroEventosProveedor()
+  public function numeroEventosProveedor($buscar="")
   {
+    $eventos = array();
+    $ciudades = array();
+    $categorias = array();
     $conexion = new Conexion();
     $conexion->abrirConexion();
     $eventoDAO = new EventoDAO(null, null, null, null, null, null, null, null, $this->proveedor);
-    $conexion->ejecutarConsulta($eventoDAO->numeroEventosProveedor());
-    $numero = $conexion->numeroFilas();
+    $conexion->ejecutarConsulta($eventoDAO->numeroEventosProveedor($buscar));
+    while ($registro = $conexion->siguienteRegistro()) {
+      $ciudad = null;
+      $categoria = null;
+      if (array_key_exists($registro[4], $ciudades)) {
+        $ciudad = $ciudades[$registro[4]];
+      } else {
+        $ciudad = new Ciudad($registro[4]);
+        $ciudad->consultarPorId();
+        $ciudades[$registro[4]] = $ciudad;
+      }
+      if (array_key_exists($registro[5], $categorias)) {
+        $categoria = $categorias[$registro[5]];
+      } else {
+        $categoria = new Categoria($registro[5]);
+        $categoria->consultarPorId();
+        $categorias[$registro[5]] = $categoria;
+      }
+      $evento = new Evento($registro[0], $registro[1], null,null, null, 
+      $registro[2], $registro[3], null, null, $ciudad, $categoria);
+      array_push($eventos, $evento);
+    }
     $conexion->cerrarConexion();
-    return $numero;
+    return $eventos;
   }
 
   public function actualizar()
@@ -428,5 +451,14 @@ class Evento
   
       $conexion->cerrarConexion();
       return $eventos;
+  }
+
+  public function setImagen(){
+    $conexion = new Conexion();
+    $conexion->abrirConexion();
+    $eventoDAO = new EventoDAO($this->idEvento, null, $this->flayer);
+    $conexion->ejecutarConsulta($eventoDAO->setImagen());
+    $conexion->cerrarConexion();
+    return true;
   }
 }

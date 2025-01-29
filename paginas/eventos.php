@@ -1,131 +1,99 @@
 <?php
-session_start();
-if(!isset($_SESSION["id"])){
-  header("Location: ../index.php");    
-}
-require ("../logica/Persona.php");
-require ("../logica/Proveedor.php");
-require ("../logica/Ciudad.php");
-require ("../logica/Categoria.php");
-require ("../logica/Evento.php");
 $id = $_SESSION["id"];
-$proveedor = new Proveedor($id);
-$proveedor -> consultarPorId();
-$evento = new Evento(null, null, null, null, null, null, null, null, $proveedor);
-$cantidadDatos = $evento -> numeroEventosProveedor();
-$cantidadDatosMostrar = 6;
-$paginas = ceil($cantidadDatos / $cantidadDatosMostrar);
-if(!isset($_GET["pagina"])){
-  header("Location: eventos.php?pagina=1");
-}
-$paginaActual = $_GET["pagina"];
-if($paginaActual > $paginas){
-  header("Location: eventos.php?pagina=1");
-}else if($paginaActual < 1){
-  header("Location: eventos.php?pagina=1");
-}
-if(isset($_POST["buscar"])){
-  $eventos = $evento -> consultarPorProveedor($_POST["inputBuscar"], (($paginaActual-1)*$cantidadDatosMostrar),$cantidadDatosMostrar);
-}else{
-  $eventos = $evento -> consultarPorProveedor(null,(($paginaActual-1)*$cantidadDatosMostrar),$cantidadDatosMostrar);
-}
-if (isset($_POST["agregarEvento"])) {
-  $nombre = $_POST["nombreEvento"];
-  $edadMinima = $_POST["edadMinima"];
-  $fecha = htmlspecialchars($_POST["fechaEvento"]);
-  $hora = htmlspecialchars($_POST["horaEvento"]);
-  $ubicacion = $_POST["ubicacionEvento"];
-  $ciudad = new Ciudad($_POST["ciudad"]);
-  $categoria = new Categoria($_POST["categoria"]);
-  $evento = new Evento(null,$ubicacion, "defaultFlayer.png", "defaultLogo.png", $edadMinima, $nombre, $fecha, $hora, $proveedor, $ciudad, $categoria);
-  if($evento -> agregar()){
-    echo "<p>evento agregado</p>";
+if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["agregarEvento"])) {
+
+  $nombre = trim($_POST["nombreEvento"]);
+  $edadMinima = trim($_POST["edadMinima"]);
+  $fecha = trim($_POST["fechaEvento"]);
+  $hora = trim($_POST["horaEvento"]);
+  $ubicacion = trim($_POST["ubicacionEvento"]);
+  $ciudad = $_POST["ciudad"];
+  $categoria = $_POST["categoria"];
+
+  // Validar que los campos no estén vacíos
+  if (empty($nombre) || empty($edadMinima) || empty($fecha) || empty($hora) || empty($ubicacion) || empty($ciudad) || empty($categoria)) {
+    echo "Error al guardar, todos los campos deben estar llenos";
+      exit();
   }
+
+  // Guardar en la base de datos
+  $evento = new Evento(null, $nombre, $edadMinima, $fecha, $hora, $ubicacion, $ciudad, $categoria);
+  if($evento->agregar()){
+    echo "Evento agregado con exito";
+  }
+
 }
-include "../componentes/encabezado.php";
+include("componentes/estiloMenu.php");
 ?>
-.full-height-sidebar {
-height: 100vh;
-}
-</style>
 
-<body>
-
-  <div class="row">
-    <div class="col-2">
-      <?php include "../componentes/navProveedor.php"; ?>
-    </div>
-    <div class="col-10">
-      <div class="container-sm">
-        <div class="container mt-3">
-          <div class="container-fluid">
-            <h2>Mis eventos</h2>
-          </div>
-          <form class="d-flex" role="search" method="post" action="eventos.php?pagina=<?php echo $paginaActual?>">
-            <input class="form-control me-2" type="search" name="inputBuscar" placeholder="Buscar" aria-label="Buscar">
-            <button class="btn btn-outline-success me-2" name="buscar" type="submit">
-              <span class="material-symbols-rounded">search</span>
-            </button>
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-              <span class="material-symbols-rounded">add</span>
-            </button>
-          </form>
-          <table class="table table-striped">
-            <thead>
-              <tr>
-                <th scope="col">#</th>
-                <th scope="col">Nombre</th>
-                <th scope="col">Fecha Evento</th>
-                <th scope="col">Ciudad</th>
-                <th scope="col">Categoria</th>
-              </tr>
-            </thead>
-            <tbody>
-              <?php
-              foreach ($eventos as $eventoActual) {
-                  echo "<tr>";
-                  echo "<th scope='row'>" . $eventoActual->getIdEvento() . "</th>";
-                  echo "<td>" . $eventoActual->getNombre() . "</td>";
-                  echo "<td>" . $eventoActual->getFechaEvento() . "<br>" . $eventoActual->getHoraEvento() . "</td>";
-                  echo "<td>" . $eventoActual->getCiudad()->getNombre() . "</td>";
-                  echo "<td>" . $eventoActual->getCategoria()->getNombre() . "</td>";
-                  echo "<td><a href='editEvento.php?id=" . $eventoActual->getIdEvento() . "' class='btn btn-success' style='color: white;'>
-                    <span class='material-symbols-rounded'>
-                      edit
-                    </span>
-                  </a></td>";
-                  echo "</tr>";
-              }
-            ?>
-            </tbody>
-          </table>
-          <nav aria-label="Page navigation example">
-            <ul class="pagination justify-content-end">
-              <li class="page-item">
-                <a class="page-link <?php echo ($paginaActual-1 < 1)?  "disabled" : "" ?>"
-                  href="eventos.php?pagina=<?php echo ($paginaActual-1 != 0)?$paginaActual-1:"" ?>"
-                  aria-label="Previous">
-                  <span aria-hidden="true">&laquo;</span>
-                </a>
-              </li>
-              <?php for($i=0;$i<$paginas;$i++){
-              echo "<li class='page-item'><a class='page-link' href='eventos.php?pagina=".($i+1)."'>".($i+1)."</a></li>";
-            }
-            ?>
-              <li class="page-item">
-                <a class="page-link <?php echo ($paginaActual+1 > $paginas)?  "disabled" : "" ?>"
-                  href="eventos.php?pagina=<?php echo ($paginaActual+1 < $paginas)?"": $paginaActual+1 ?>"
-                  aria-label="Next">
-                  <span aria-hidden="true">&raquo;</span>
-                </a>
-              </li>
-            </ul>
-          </nav>
+<body id="body-pd">
+  <?php
+  include("componentes/navProveedor.php");
+  ?>
+  <div class="container-sm">
+    <div class="container mt-3">
+      <div class="container-fluid">
+        <h2>Mis eventos</h2>
+      </div>
+      <div class="event-container" id="eventContainer">
+        <div class="d-flex">
+          <input class="form-control me-2" id="search" name="inputBuscar" placeholder="Buscar" aria-label="Buscar">
+          <button type="button" class="btn btn-primary" data-bs-toggle="modal" id="modal">
+            <span class="material-symbols-rounded">add</span>
+          </button>
+        </div>
+        <br>
+        <div class="container" id="datatable">
         </div>
       </div>
     </div>
   </div>
-  <?php include "../componentes/agregarEvento.php"; ?>
-</body>
 
-</html>
+  <?php include "componentes/agregarEvento.php"; ?>
+  <script>
+    function cargarEventos(pagina = 1, filtro = '') {
+      $.ajax({
+        url: 'indexAjax.php',
+        type: 'GET',
+        data: {
+          pid: '<?= base64_encode("ajax/tablaAjax.php") ?>',
+          pagina: pagina,
+          filtro: filtro,
+          id: <?= $id ?>
+        },
+        success: function(response) {
+          $('#datatable').html(response);
+        }
+      });
+    }
+    $(document).ready(function() {
+
+      cargarEventos(1, '<?php echo $_GET['filtro'] ?? ""; ?>');
+      $("#modal").on('click', function() {
+        console.log("clickable");
+      });
+      $("#search").keyup(function() {
+        const filtro = $('#search').val();
+        if (filtro.length >= 3 || filtro.length == 0) {
+          let pagina = $(this).data('pagina');
+          cargarEventos(pagina, filtro);
+        }
+      });
+      $('#modal').on("click", function() {
+        url = "indexAjax.php?pid=<?= base64_encode("ajax/crearEvento.php"); ?>";
+        console.log(url);
+        $("#eventContainer").load(url);
+      });
+    });
+    $(document).on('click', '.page-link', function(e) {
+      e.preventDefault(); // Evita que el enlace recargue la página
+
+      let pagina = $(this).data('pagina'); // Obtiene la página desde el atributo data
+      const filtro = $('#search').val();
+
+      if (!$(this).parent().hasClass('disabled')) {
+        cargarEventos(pagina, filtro);
+      }
+    });
+  </script>
+</body>

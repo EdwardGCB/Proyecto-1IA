@@ -1,52 +1,57 @@
 <?php
-session_start();
-if(!isset($_SESSION["id"])){
-  header("Location: ../index.php");    
-}
-require ("../logica/Persona.php");
-require ("../logica/Proveedor.php");
-require ("../logica/Ciudad.php");
-require ("../logica/Categoria.php");
-require ("../logica/Evento.php");
-require ("../logica/EventoZona.php");
-require ("../logica/Zona.php");
-require ("../logica/Asiento.php");
 $id = $_SESSION["id"];
 $proveedor = new Proveedor($id);
-$proveedor -> consultarPorId();
+$proveedor->consultarPorId();
 $zona = new Zona();
-if(!isset($_GET["id"]) || $_GET["id"] < 1){
-  header("Location: sesionProveedor.php"); 
-}
-$idEvento= $_GET["id"];
-$evento = new Evento($idEvento, null, null, null, null, null, null, null, $proveedor);
-if(!$evento->consultaPorId()){
+if (!isset($_GET["id"]) || $_GET["id"] < 1) {
   header("Location: sesionProveedor.php");
 }
-if(isset($_POST["refresh"])){
+$idEvento = $_GET["id"];
+$evento = new Evento($idEvento, null, null, null, null, null, null, null, $proveedor);
+if (!$evento->consultaPorId()) {
+  header("Location: sesionProveedor.php");
+}
+if (isset($_POST["refresh"])) {
   $zona->setIdZona($_POST["zona"]);
   $zona->consultarPorID();
-  $asiento = new Asiento(null,null,null,$zona);
-  if(!$asiento->existenciaEnZona()){
+  $asiento = new Asiento(null, null, null, $zona);
+  if (!$asiento->existenciaEnZona()) {
     $asiento->generarAsientos();
   }
   $filaAsientos = $asiento->consultarFilasZona();
   $columnasAsientos = $asiento->consultarColumnasZona();
 }
 
-if(isset($_POST["agregar"])){
+if (isset($_POST["agregar"])) {
   $zona->setIdZona($_POST["zona"]);
   $zona->consultarPorID();
-  $aforo= $_POST["aforo"];
-  $valor= $_POST["valor"];
-  $eventoZona = new EventoZona($valor,$aforo,$evento,$zona);
-  if(!$eventoZona->consultarExistencia()){
-    $eventoZona->insertar(); 
-  }else{
-
+  $aforo = $_POST["aforo"];
+  $valor = $_POST["valor"];
+  $eventoZona = new EventoZona($valor, $aforo, $evento, $zona);
+  if (!$eventoZona->consultarExistencia()) {
+    $eventoZona->insertar();
+  } else {
   }
 }
-if(isset($_POST["guardar"])){
+if (isset($_FILES["imagenEvento"]) && $_FILES["imagenEvento"]["error"] == 0) {
+  $directorioDestino = "img/eventos/";
+  $extension = pathinfo($_FILES["imagenEvento"]["name"], PATHINFO_EXTENSION);
+  $nombreArchivo = $idEvento . "." . $extension;
+  $rutaArchivo = $directorioDestino . $nombreArchivo;
+
+  // Si existe una imagen con ese nombre, se reemplaza
+  if (file_exists($rutaArchivo)) {
+    unlink($rutaArchivo);
+  }
+
+  // Mover el archivo al directorio de destino
+  if (move_uploaded_file($_FILES["imagenEvento"]["tmp_name"], $rutaArchivo)) {
+    echo $rutaArchivo;
+    $eventoImagen = new Evento($id, null, $rutaArchivo);
+    $evento->setImagen();
+  }
+}
+if (isset($_POST["guardar"])) {
   $evento->setNombre($_POST["nombreEvento"]);
   $evento->setEdadMinima($_POST["edadMinima"]);
   $evento->setFechaEvento($_POST["fechaEvento"]);
@@ -55,29 +60,24 @@ if(isset($_POST["guardar"])){
   $evento->setCiudad($ciudad);
   $categoria = new Categoria($_POST["categoria"]);
   $evento->setCategoria($categoria);
-  if($evento->actualizar()){
-    header("Location: editEvento.php?id=".$evento->getIdEvento()."");
+  if ($evento->actualizar()) {
+    header("Location: editEvento.php?id=" . $evento->getIdEvento() . "");
   }
 }
-
-include "../componentes/encabezado.php";
+include("componentes/estiloMenu.php");
 ?>
-.full-height-sidebar {
-height: 100%;
-}
-</style>
 
 <body>
 
-  <div class="row">
-    <div class="col-2">
-      <?php include "../componentes/navProveedor.php"; ?>
-    </div>
-    <div class="col-10">
-      <div class="container">
+  <body id="body-pd">
+
+    <?php include "componentes/navProveedor.php"; ?>
+
+    <div class="container">
+      <form id="moduleForm" method="post" action="?pid=<?= base64_encode("paginas/editEvento.php") ?>&id=<?php echo $evento->getIdEvento() ?>">
         <div class="container mt-4">
           <div class="container-fluid">
-            <h2>Evento #<?php echo $evento->getIdEvento()?></h2>
+            <h2>Evento #<?php echo $evento->getIdEvento() ?></h2>
           </div>
           <!--info del evento-->
           <div class="card">
@@ -86,68 +86,70 @@ height: 100%;
             </div>
             <div class="card-body">
               <div class="row">
-                <form action="editEvento.php?id=<?php echo $evento->getIdEvento()?>" method="post">
-                  <!-- Nombre del evento -->
-                  <div class="form-floating mb-3">
-                    <input type="text" class="form-control rounded-4" name="nombreEvento" id="nombreEvento"
-                      value="<?php echo $evento->getNombre(); ?>">
-                    <label for="nombreEvento">Nombre evento</label>
-                  </div>
-                  <!-- Edad Minima del evento -->
-                  <div class="form-floating mb-3">
-                    <input type="text" class="form-control" name="edadMinima" id="edadMinima"
-                      aria-describedby="basic-addon1" value="<?php
-                         echo $evento->getEdadMinima(); 
-                         ?>">
-                    <label for="edadMinima">Edad Minima</label>
-                  </div>
-                  <!-- Fecha del evento -->
-                  <!-- Fecha del evento -->
-                  <div class="form-floating mb-3">
-                    <input type="date" class="form-control" name="fechaEvento" id="fechaEvento" aria-label="fechaEvento"
-                      aria-describedby="basic-addon1" value="<?php
-                        echo $evento->getFechaEvento();
-                         ?>">
-                    <label for="fechaEvento">Fecha Evento</label>
-                  </div>
 
-                  <!-- hora del evento -->
-                  <div class="form-floating mb-3">
-                    <input type="time" class="form-control" name="horaEvento" id="horaEvento" aria-label="horaEvento"
-                      aria-describedby="basic-addon1" value="<?php echo $evento->getHoraEvento(); ?>">
-                    <label for="horaEvento">Hora Evento</label>
-                  </div>
-                  <!-- direccion del evento -->
+                <!-- Nombre del evento -->
+                <div class="form-floating mb-3">
+                  <input type="text" class="form-control rounded-4" name="nombreEvento" id="nombreEvento"
+                    value="<?php echo $evento->getNombre(); ?>">
+                  <label for="nombreEvento">Nombre evento</label>
+                </div>
+                <!-- Edad Minima del evento -->
+                <div class="form-floating mb-3">
+                  <input type="text" class="form-control" name="edadMinima" id="edadMinima"
+                    aria-describedby="basic-addon1" value="<?php
+                                                            echo $evento->getEdadMinima();
+                                                            ?>">
+                  <label for="edadMinima">Edad Minima</label>
+                </div>
+                <!-- Fecha del evento -->
+                <!-- Fecha del evento -->
+                <div class="form-floating mb-3">
+                  <input type="date" class="form-control" name="fechaEvento" id="fechaEvento" aria-label="fechaEvento"
+                    aria-describedby="basic-addon1" value="<?php
+                                                            echo $evento->getFechaEvento();
+                                                            ?>">
+                  <label for="fechaEvento">Fecha Evento</label>
+                </div>
 
-                  <!-- Lugar del evento -->
-                  <select class="form-select mb-3" name="ciudad" id="ciudad" aria-label="Default select example">
-                    <option value="" disabled>Ciudad</option>
-                    <?php
-                      $ciudad = new Ciudad();
-                      $ciudades = $ciudad->consultarTodos();
-                      foreach ($ciudades as $ciudadActual) {
-                          $selected = ($ciudadActual->getIdCiudad() == $evento->getCiudad()->getIdCiudad()) ? 'selected' : '';
-                          echo '<option value="' . $ciudadActual->getIdCiudad() . '" ' . $selected . '>' . $ciudadActual->getNombre() . '</option>';
-                      }
-                    ?>
-                  </select>
+                <!-- hora del evento -->
+                <div class="form-floating mb-3">
+                  <input type="time" class="form-control" name="horaEvento" id="horaEvento" aria-label="horaEvento"
+                    aria-describedby="basic-addon1" value="<?php echo $evento->getHoraEvento(); ?>">
+                  <label for="horaEvento">Hora Evento</label>
+                </div>
+                <!-- direccion del evento -->
 
-                  <!-- Tipo de evento -->
-                  <select class="form-select mb-3" name="categoria" id="categoria" aria-label="Default select example">
-                    <option selected>Categoria</option>
-                    <?php
-                      $categoria = new Categoria();
-                      $categorias = $categoria->consultarCategorias();
-                      foreach ($categorias as $categoriaActual) {
-                        $selected = ($categoriaActual->getIdCategoria() == $evento->getCategoria()->getIdCategoria()) ? 'selected' : '';
-                        echo '<option value="' . $categoriaActual->getIdCategoria() . '" ' . $selected . '>' . $categoriaActual->getNombre() . '</option>';
-                      }
-                    ?>
-                  </select>
-                  <!-- boton para guardar los cambios-->
-                  <button type="submit" class="btn btn-primary" name="guardar">Guardar Cambios</button>
+                <!-- Lugar del evento -->
+                <select class="form-select mb-3" name="ciudad" id="ciudad" aria-label="Default select example">
+                  <option value="" disabled>Ciudad</option>
+                  <?php
+                  $ciudad = new Ciudad();
+                  $ciudades = $ciudad->consultarTodos();
+                  foreach ($ciudades as $ciudadActual) {
+                    $selected = ($ciudadActual->getIdCiudad() == $evento->getCiudad()->getIdCiudad()) ? 'selected' : '';
+                    echo '<option value="' . $ciudadActual->getIdCiudad() . '" ' . $selected . '>' . $ciudadActual->getNombre() . '</option>';
+                  }
+                  ?>
+                </select>
+
+                <!-- Tipo de evento -->
+                <select class="form-select mb-3" name="categoria" id="categoria" aria-label="Default select example">
+                  <option selected>Categoria</option>
+                  <?php
+                  $categoria = new Categoria();
+                  $categorias = $categoria->consultarCategorias();
+                  foreach ($categorias as $categoriaActual) {
+                    $selected = ($categoriaActual->getIdCategoria() == $evento->getCategoria()->getIdCategoria()) ? 'selected' : '';
+                    echo '<option value="' . $categoriaActual->getIdCategoria() . '" ' . $selected . '>' . $categoriaActual->getNombre() . '</option>';
+                  }
+                  ?>
+                </select>
+                <div class="mb-3">
+                  <label for="imagenEvento" class="form-label">Imagen del Evento</label>
+                  <input type="file" class="form-control" name="imagenEvento">
+                </div>
+                <button type="submit" class="btn btn-primary" name="guardar">Guardar Cambios</button>
               </div>
-              </form>
             </div>
           </div>
         </div>
@@ -162,48 +164,47 @@ height: 100%;
                 <div class="card-body">
                   <!--zonas-->
                   <div id="dynamicForm" class="hidden mt-3">
-                    <form id="moduleForm" method="post" action="editEvento.php?id=<?php echo $evento->getIdEvento()?>">
-                      <div class="mb-3">
-                        <label for="selectField" class="form-label">Select Field</label>
-                        <select id="selectField" class="form-select" name="zona">
-                          >
-                          <?php
-                                $zonat = new Zona();
-                                $zonas = $zonat->consultarTodos();
-                                foreach ($zonas as $zonaActual) {
-                                  $selected = ($zonaActual->getIdZona() == $zona->getIdZona()) ? 'selected' : '';
-                                  echo '<option value="' . $zonaActual->getIdZona() . '" ' . $selected . '>' . $zonaActual->getNombre() . '</option>';
-                                }
-                              ?>
-                        </select>
-                      </div>
-                      <!--columna del asiento-->
-                      <div class="form-floating mb-3">
-                        <input type="text" class="form-control" id="input1" name="columna"
-                          value="<?php echo  (isset($columnasAsientos))? $columnasAsientos : '1-10'?>" readonly>
-                        <label for="input1" class="form-label">Cantidad de columnas</label>
-                      </div>
-                      <!--fila del asiento-->
-                      <div class="form-floating mb-3">
-                        <input type="text" class="form-control" id="input2" name="fila"
-                          value="<?php echo (isset($filaAsientos))? $filaAsientos: '1-26'?>" readonly>
-                        <label for="input2" class="form-label">Cantidad de filas</label>
-                      </div>
-                      <!--precio de la zona-->
-                      <div class="form-floating mb-3">
-                        <input type="text" class="form-control" id="input2" name="valor" placeholder="Enter text">
-                        <label for="input2" name="precio" class="form-label">Precio de la zona</label>
-                      </div>
-                      <!--aforo-->
-                      <div class="form-floating mb-3">
-                        <input type="text" class="form-control" id="input3" name="aforo" placeholder="Enter text"
-                          value="<?php echo (isset($filaAsientos) && isset($columnasAsientos))? ($filaAsientos*$columnasAsientos): '' ?>"
-                          readonly>
-                        <label for="input3" class="form-label">Aforo</label>
-                      </div>
-                      <button type="submit" name="refresh" class="btn btn-secondary">refrescar</button>
-                      <button type="submit" name="agregar" class="btn btn-success">Agregar</button>
-                    </form>
+
+                    <div class="mb-3">
+                      <label for="selectField" class="form-label">Select Field</label>
+                      <select id="selectField" class="form-select" name="zona">
+                        >
+                        <?php
+                        $zonat = new Zona();
+                        $zonas = $zonat->consultarTodos();
+                        foreach ($zonas as $zonaActual) {
+                          $selected = ($zonaActual->getIdZona() == $zona->getIdZona()) ? 'selected' : '';
+                          echo '<option value="' . $zonaActual->getIdZona() . '" ' . $selected . '>' . $zonaActual->getNombre() . '</option>';
+                        }
+                        ?>
+                      </select>
+                    </div>
+                    <!--columna del asiento-->
+                    <div class="form-floating mb-3">
+                      <input type="text" class="form-control" id="input1" name="columna"
+                        value="<?php echo (isset($columnasAsientos)) ? $columnasAsientos : '1-10' ?>" readonly>
+                      <label for="input1" class="form-label">Cantidad de columnas</label>
+                    </div>
+                    <!--fila del asiento-->
+                    <div class="form-floating mb-3">
+                      <input type="text" class="form-control" id="input2" name="fila"
+                        value="<?php echo (isset($filaAsientos)) ? $filaAsientos : '1-26' ?>" readonly>
+                      <label for="input2" class="form-label">Cantidad de filas</label>
+                    </div>
+                    <!--precio de la zona-->
+                    <div class="form-floating mb-3">
+                      <input type="text" class="form-control" id="input2" name="valor" placeholder="Enter text">
+                      <label for="input2" name="precio" class="form-label">Precio de la zona</label>
+                    </div>
+                    <!--aforo-->
+                    <div class="form-floating mb-3">
+                      <input type="text" class="form-control" id="input3" name="aforo" placeholder="Enter text"
+                        value="<?php echo (isset($filaAsientos) && isset($columnasAsientos)) ? ($filaAsientos * $columnasAsientos) : '' ?>"
+                        readonly>
+                      <label for="input3" class="form-label">Aforo</label>
+                    </div>
+                    <button type="submit" name="refresh" class="btn btn-secondary">refrescar</button>
+                    <button type="submit" name="agregar" class="btn btn-success">Agregar</button>
                   </div>
                 </div>
               </div>
@@ -214,15 +215,12 @@ height: 100%;
                   Tabla de Zonas
                 </div>
                 <div class="card-body">
-                  <?php include "../componentes/tablaEventosZona.php"?>
+                  <?php include "componentes/tablaEventosZona.php" ?>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      </form>
     </div>
-  </div>
-</body>
-
-</html>
+  </body>

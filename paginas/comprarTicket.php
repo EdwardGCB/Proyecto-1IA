@@ -163,7 +163,7 @@ if (isset($_POST["generarTicket"])) {
   <!-- Seat reservation table -->
   <section class="seat-reservation">
     <h2>Reserva de asientos automáticos</h2>
-    <form method="post" action="comprarTicket.php?idEvento=<?= $evento->getIdEvento() ?>">
+    <form method="post" action="?pid=<?=base64_encode("paginas/comprarTicket.php")?>&idEvento=<?= $evento->getIdEvento() ?>">
       <table class="table table-striped">
         <thead>
           <tr>

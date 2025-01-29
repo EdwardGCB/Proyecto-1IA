@@ -19,7 +19,7 @@ require("logica/Factura.php");
 
 $paginasSinSesion = array(
   "paginas/home.php",
-  "paginas/CategoriaEvento.php",
+  "paginas/categoriaEvento.php",
   "paginas/ciudadEvento.php",
   "paginas/eventoInfo.php",
   "paginas/Evento.php",
@@ -42,7 +42,8 @@ if (isset($_GET['pid']) && in_array($_GET['pid'], $paginasPDF)) {
   include($_GET['pid']);
 } else {
 ?>
-  <html>
+  <!DOCTYPE html>
+  <html lang="en">
 
   <head>
     <link
